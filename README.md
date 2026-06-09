@@ -1,6 +1,6 @@
 # My_Portfolio
 
-Personal portfolio website built with **React + Vite**.
+Personal portfolio website built with **React + Vite**. and lots of loves
 
 ## Run locally
 ```bash
