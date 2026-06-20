@@ -1,14 +1,8 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-/* Interactive typing terminal component */
-const TerminalAbout = ({ isInView }) => {
-  const [lines, setLines] = useState([]);
-  const [cursorVisible, setCursorVisible] = useState(true);
-  const hasStarted = useRef(false);
-
-  const terminalLines = [
-    { type: 'command', text: 'whoami' },
+const terminalLines = [
+  { type: 'command', text: 'whoami' },
     { type: 'output', text: 'Manish Yadav — A curious person' },
     { type: 'blank' },
     { type: 'command', text: 'cat about.json' },
@@ -25,6 +19,11 @@ const TerminalAbout = ({ isInView }) => {
     { type: 'output', text: '"Learn something new every single day."' },
     { type: 'cursor' },
   ];
+
+/* Interactive typing terminal component */
+const TerminalAbout = ({ isInView }) => {
+  const [lines, setLines] = useState([]);
+  const hasStarted = useRef(false);
 
   useEffect(() => {
     if (!isInView || hasStarted.current) return;

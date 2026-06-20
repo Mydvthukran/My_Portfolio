@@ -62,7 +62,7 @@ const LoadingScreen = ({ onComplete }) => {
       duration: 0.7,
       ease: 'power4.inOut',
     });
-  }, []);
+  }, [onComplete]);
 
   if (!show) return null;
 
@@ -78,7 +78,6 @@ const LoadingScreen = ({ onComplete }) => {
 
 const App = () => {
   const appRef = useRef(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -161,7 +160,7 @@ const App = () => {
 
   return (
     <div className="app-wrapper" ref={appRef}>
-      <LoadingScreen onComplete={() => setLoaded(true)} />
+      <LoadingScreen onComplete={() => {}} />
       <ScrollProgress />
       <CustomCursor />
       <Navbar />
