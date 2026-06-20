@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
+import CurtainTransition from '../components/CurtainTransition';
 
 const skillCategories = [
   {
@@ -44,6 +45,7 @@ const Skills = () => {
 
   return (
     <section className="section" id="skills" ref={sectionRef}>
+      <CurtainTransition isInView={isInView} />
       <div className="section-container">
         <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
 
