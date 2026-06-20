@@ -1,10 +1,34 @@
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import HeroScene from '../components/HeroScene';
 import MagneticButton from '../components/MagneticButton';
 import heroImg from '../assets/me/hero-cinematic.png';
 
 const Hero = () => {
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    const triggerLightning = () => {
+      // Random interval between 4s and 12s
+      const nextFlash = 4000 + Math.random() * 8000;
+      timeoutId = setTimeout(() => {
+        setFlash(true);
+        // Turn off flash quickly
+        setTimeout(() => setFlash(false), 100);
+        // Maybe a second quick flash
+        if (Math.random() > 0.4) {
+          setTimeout(() => setFlash(true), 250);
+          setTimeout(() => setFlash(false), 300);
+        }
+        triggerLightning();
+      }, nextFlash);
+    };
+
+    triggerLightning();
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -55,6 +79,7 @@ const Hero = () => {
       <div className="hero-overlay-top" />
       <div className="hero-overlay-bottom" />
       <div className="hero-overlay-vignette" />
+      <div className={`lightning-flash ${flash ? 'active' : ''}`} />
 
       {/* Atmospheric dust */}
       <div className="hero-particles">

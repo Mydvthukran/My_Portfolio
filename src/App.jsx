@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
+import AmbientAudio from './components/AmbientAudio';
 
 import Hero from './sections/Hero';
 import About from './sections/About';
@@ -163,6 +164,7 @@ const App = () => {
       <LoadingScreen onComplete={() => {}} />
       <ScrollProgress />
       <CustomCursor />
+      <AmbientAudio />
       <Navbar />
       <main>
         <Hero />
