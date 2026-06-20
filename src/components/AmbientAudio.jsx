@@ -6,10 +6,10 @@ const AmbientAudio = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    // Create audio element
-    const audio = new Audio('https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg');
+    // Create audio element - Soft, high quality rain on roof
+    const audio = new Audio('https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg');
     audio.loop = true;
-    audio.volume = 0.3; // subtle
+    audio.volume = 0.5; // subtle
     audioRef.current = audio;
 
     return () => {

@@ -1726,6 +1726,37 @@ body::after {
   color: var(--accent);
 }
 
+/* Project Filters */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: none;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.filter-btn.active {
+  background: rgba(200, 169, 125, 0.15);
+  border-color: rgba(200, 169, 125, 0.4);
+  color: var(--accent);
+}
+
 /* Lightning Flash Effect */
 .lightning-flash {
   position: absolute;

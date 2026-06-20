@@ -5,8 +5,8 @@ const createDrop = (id) => ({
   x: 10 + Math.random() * 85,
   y: -5 - Math.random() * 15,
   length: 12 + Math.random() * 20,
-  speed: 1.5 + Math.random() * 2.5,
-  opacity: 0.1 + Math.random() * 0.2,
+  speed: 0.8 + Math.random() * 1.2,
+  opacity: 0.05 + Math.random() * 0.15,
   width: 1 + Math.random() * 1.5,
   splashing: false,
   splashX: 0,
@@ -18,7 +18,7 @@ const HeroScene = () => {
   const [splashes, setSplashes] = useState([]);
   const nextId = useRef(0);
   const nextSplashId = useRef(0);
-  const maxDrops = 18;
+  const maxDrops = 100;
 
   // Initialize drops spread across screen
   useEffect(() => {

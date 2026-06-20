@@ -1,10 +1,13 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
 
 const Projects = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  const filters = ['All', 'React', 'Python', 'AI', 'Full Stack'];
 
   const projects = [
     {
@@ -62,21 +65,50 @@ const Projects = () => {
     },
   ];
 
+  const filteredProjects = projects.filter(project => {
+    if (activeFilter === 'All') return true;
+    if (activeFilter === 'React') return project.technologies.includes('React');
+    if (activeFilter === 'Python') return project.technologies.includes('Python');
+    if (activeFilter === 'AI') return project.technologies.includes('AI') || project.technologies.includes('Gemini AI');
+    if (activeFilter === 'Full Stack') return project.technologies.includes('Full Stack') || project.technologies.includes('FastAPI');
+    return true;
+  });
+
   return (
     <section className="section" id="projects" ref={sectionRef}>
       <div className="section-container">
         <SectionTitle label="Portfolio" title="Featured" titleAccent="Work" />
 
-        <div className="projects-grid">
-          {projects.map((project, i) => (
-            <motion.div
-              key={i}
-              className="project-card"
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: i * 0.07 }}
+        <motion.div 
+          className="project-filters"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {filters.map((f) => (
+            <button
+              key={f}
+              className={`filter-btn ${activeFilter === f ? 'active' : ''}`}
+              onClick={() => setActiveFilter(f)}
             >
-              <div className="project-header">
+              {f}
+            </button>
+          ))}
+        </motion.div>
+
+        <motion.div layout className="projects-grid">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.div
+                layout
+                key={project.title}
+                className="project-card"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
+              >
+                <div className="project-header">
                 <div className="project-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
@@ -109,9 +141,10 @@ const Projects = () => {
                   <span key={j} className="tech-tag">{tech}</span>
                 ))}
               </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
         <motion.div
           className="github-cta"
