@@ -29,11 +29,19 @@ const ShieldTerminal = ({ isInView }) => {
     const total = shieldLogs.length;
 
     const addLine = () => {
-      if (!isActive || idx >= total) return;
-      setLines((prev) => [...prev, shieldLogs[idx]]);
+      if (!isActive) return;
+      const currentIdx = idx; // Capture current index
+      if (currentIdx >= total) return;
+
+      const currentLine = shieldLogs[currentIdx];
+      if (!currentLine) return; // Extra safety check
+
+      setLines((prev) => [...prev, currentLine]);
       idx++;
-      if (idx >= total) return;
-      const delay = shieldLogs[idx].type === 'command' ? 800 : 150;
+
+      if (idx >= total) return; // Stop if we just added the last line
+      
+      const delay = currentLine.type === 'command' ? 800 : currentLine.type === 'blank' ? 200 : 150;
       setTimeout(addLine, delay);
     };
     setTimeout(() => { if (isActive) addLine(); }, 500);
