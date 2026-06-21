@@ -1084,7 +1084,7 @@ body::after {
    SKILLS SECTION
    ===================================================================== */
 /* =====================================================================
-   SKILLS SECTION (Magnetic Orbit)
+   SKILLS SECTION (Magnetic Orbit - Default Theme)
    ===================================================================== */
 .skills-orbit-viewport {
   position: relative;
@@ -1108,6 +1108,69 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.orbit-ring-track {
+  position: absolute;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.orbit-node-wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+@keyframes spin-ring {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-ring-counter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* =====================================================================
+   SKILLS SECTION (Orb-Weaver Web - Avengers Theme)
+   ===================================================================== */
+.orb-weaver-viewport {
+  position: relative;
+  width: 100%;
+  height: 800px; /* Base size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 40px; /* Top padding to prevent header collision */
+  /* Scale down perfectly to fit container width without clipping */
+  transform: scale(min(1, 100vw / 1000));
+  transform-origin: center top;
+}
+
+.orb-weaver-system {
+  position: relative;
+  width: 1000px;
+  height: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Maximum 3D tilt clamped to ±10 degrees via Framer Motion, so it remains highly readable */
+  transform-style: preserve-3d;
+  perspective: 1500px;
+}
+
+.orb-weaver-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .orbit-core {
@@ -1140,27 +1203,12 @@ body::after {
   background: radial-gradient(circle, rgba(200, 169, 125, 0.2) 0%, transparent 70%);
   border-radius: 50%;
   z-index: -1;
-  animation: pulse-glow 4s ease-in-out infinite;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); opacity: 0.6; }
-  50% { transform: scale(1.3); opacity: 1; }
-}
-
-.orbit-ring-track {
-  position: absolute;
-  border: 1px dashed rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.orbit-node-wrapper {
+.orb-node-wrapper {
   position: absolute;
   transform: translate(-50%, -50%);
-  transform-style: preserve-3d;
-  pointer-events: auto;
+  z-index: 5;
 }
 
 .orbit-node-inner {
@@ -1176,26 +1224,23 @@ body::after {
   letter-spacing: 0.5px;
   white-space: nowrap;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
+  cursor: default;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.orbit-node-wrapper:hover .orbit-node-inner {
+.orb-node-wrapper:hover .orbit-node-inner {
   background: rgba(200, 169, 125, 0.15);
   border-color: rgba(200, 169, 125, 0.5);
   color: var(--accent);
-  transform: scale(1.15) translateY(-5px);
   box-shadow: 0 10px 30px rgba(200, 169, 125, 0.2);
 }
 
-@keyframes spin-ring {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spin-ring-counter {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+@media (max-width: 768px) {
+  /* On mobile, remove any residual 3D tilt for perfectly flat readability */
+  .orb-weaver-system {
+    perspective: none !important;
+    transform: none !important;
+  }
 }
 
 /* =====================================================================
@@ -1879,26 +1924,330 @@ body.theme-avengers {
   --bg-deep: #0a0303; /* Very dark blood red */
 }
 
-/* Skills 3D Space */
-body.theme-avengers .skills-orbit-system {
-  transform: rotateX(65deg) scale(1.3) !important; /* Sky-faced */
+/* Sky-faced 3D Web for Avengers Theme */
+body.theme-avengers .orb-weaver-system {
+  transform: rotateX(65deg) scale(1.3) !important;
   transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-body.theme-avengers .orbit-ring-track,
-body.theme-avengers .orbit-node-wrapper {
-  animation-play-state: paused !important;
-}
-
-body.theme-avengers .orbit-node-inner {
-  transform: rotateX(-65deg) scale(1.2) !important; /* Stand up to face the camera so it is readable */
-  animation-play-state: paused !important;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Pop-up shadow */
-}
-
 body.theme-avengers .orbit-core {
   transform: rotateX(-65deg) translateZ(30px) !important;
   box-shadow: 0 30px 40px rgba(0,0,0,0.8) !important;
+}
+body.theme-avengers .orbit-node-inner {
+  transform: rotateX(-65deg) scale(1.2) !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+/* =====================================================================
+   PROJECTS SECTION (SHIELD Database - Avengers Theme)
+   ===================================================================== */
+.avengers-projects-section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 10;
+}
+
+.avengers-project-filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.avengers-filter-btn {
+  background: transparent;
+  border: 1px solid rgba(229, 9, 20, 0.3);
+  color: #ff4d4d;
+  padding: 8px 16px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.avengers-filter-btn:hover,
+.avengers-filter-btn.active {
+  background: rgba(229, 9, 20, 0.2);
+  border-color: #ff4d4d;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.4);
+}
+
+.avengers-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+  perspective: 1000px;
+}
+
+.avengers-project-card {
+  background: rgba(10, 3, 3, 0.8);
+  border: 1px solid rgba(229, 9, 20, 0.4);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(229, 9, 20, 0.05);
+}
+
+.avengers-project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(229, 9, 20, 0.2), inset 0 0 30px rgba(229, 9, 20, 0.1);
+  border-color: #ff4d4d;
+}
+
+.hologram-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 77, 77, 0.8);
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.8);
+  opacity: 0.5;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(10000%); }
+}
+
+.avengers-project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px dashed rgba(229, 9, 20, 0.3);
+  padding-bottom: 15px;
+}
+
+.avengers-project-status {
+  font-family: monospace;
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  background: rgba(229, 9, 20, 0.1);
+  padding: 4px 8px;
+  border: 1px solid rgba(229, 9, 20, 0.3);
+}
+
+.avengers-project-links {
+  display: flex;
+  gap: 15px;
+}
+
+.avengers-link {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.avengers-link:hover {
+  color: #ff4d4d;
+}
+
+.avengers-project-title {
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+}
+
+.avengers-project-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 25px;
+}
+
+.avengers-tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.avengers-tech-tag {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+
+/* =====================================================================
+   ABOUT SECTION (SHIELD Dossier - Avengers Theme)
+   ===================================================================== */
+.avengers-about-section {
+  padding: 100px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.avengers-section-label {
+  font-family: monospace;
+  color: #ff4d4d;
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.pulsing-dot {
+  width: 10px;
+  height: 10px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff4d4d;
+  animation: pulse-red 1.5s infinite alternate;
+}
+
+@keyframes pulse-red {
+  from { opacity: 0.5; box-shadow: 0 0 5px #ff4d4d; }
+  to { opacity: 1; box-shadow: 0 0 20px #ff4d4d; }
+}
+
+.avengers-dossier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .avengers-dossier-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.avengers-dossier-panel {
+  background: rgba(10, 2, 2, 0.85);
+  border: 1px solid rgba(229, 9, 20, 0.4);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.avengers-dossier-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(229, 9, 20, 0.03) 2px, rgba(229, 9, 20, 0.03) 4px);
+  pointer-events: none;
+}
+
+/* TERMINAL */
+.avengers-terminal {
+  font-family: monospace;
+  color: #ff4d4d;
+}
+
+.avengers-terminal-header {
+  border-bottom: 1px dashed rgba(229, 9, 20, 0.4);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  position: relative;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.avengers-terminal-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.log-system { color: #888; }
+.log-success { color: #00ff00; text-shadow: 0 0 8px rgba(0,255,0,0.5); }
+.log-command { color: #fff; margin-top: 5px; }
+.log-command span { color: #ff4d4d; }
+.log-data { margin-left: 15px; }
+.log-key { color: #888; }
+.log-value { color: #fff; }
+.log-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 15px;
+  background: #ff4d4d;
+  animation: blink 1s step-end infinite;
+}
+
+/* DOSSIER INFO */
+.dossier-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 6rem;
+  font-weight: 900;
+  color: rgba(229, 9, 20, 0.04);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dossier-heading {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.dossier-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.dossier-stats {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.dossier-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-stat .stat-num {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.4);
+}
+
+.dossier-stat .stat-desc {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #888;
+  letter-spacing: 1px;
 }
 
 /* Flash Effects */
@@ -1918,17 +2267,7 @@ body.theme-avengers .orbit-core {
   100% { opacity: 0; }
 }
 
-/* Skills Falling into Web (3D) */
-.web-stuck {
-  animation: fallIntoWeb 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
 
-@keyframes fallIntoWeb {
-  0% { transform: translateZ(1000px) scale(0.5); opacity: 0; }
-  60% { transform: translateZ(-20px) scale(1.1); opacity: 1; }
-  80% { transform: translateZ(10px) scale(0.95); }
-  100% { transform: translateZ(0) scale(1); }
-}
 
 /* Gauntlet Button */
 .gauntlet-btn {
@@ -1989,29 +2328,7 @@ body.theme-avengers .orbit-core {
   50% { transform: translateY(-10px); }
 }
 
-/* Spider Web Overlay */
-.spider-web-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  animation: webFadeIn 1s ease-out 1.5s forwards;
-}
 
-.spider-web-svg {
-  width: 100%;
-  height: 100%;
-  max-width: 800px;
-}
-
-@keyframes webFadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
 
 /* Arc Reactor Button (Iron Man Rescue) */
 .arc-reactor-container {
