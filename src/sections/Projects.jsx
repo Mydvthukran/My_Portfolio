@@ -85,40 +85,35 @@ const Projects = () => {
   useEffect(() => {
     if (!trackRef.current || !sectionRef.current || !wrapperRef.current) return;
     
-    let ctx = gsap.context(() => {});
+    let mm = gsap.matchMedia();
     
     // Give DOM time to update after filter changes (Framer Motion animations)
     const timer = setTimeout(() => {
-      ctx.add(() => {
+      mm.add("(min-width: 769px)", () => {
         const track = trackRef.current;
+        const getDistance = () => {
+          const wrapperLeft = wrapperRef.current.getBoundingClientRect().left;
+          return Math.max(0, track.scrollWidth - window.innerWidth + wrapperLeft + 80);
+        };
         
-        // Use matchMedia to handle responsive behavior
-        let mm = gsap.matchMedia();
-        mm.add("(min-width: 769px)", () => {
-          const getDistance = () => {
-            const wrapperLeft = wrapperRef.current.getBoundingClientRect().left;
-            return Math.max(0, track.scrollWidth - window.innerWidth + wrapperLeft + 80);
-          };
-          
-          gsap.to(track, {
-            x: () => -getDistance(),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top top',
-              end: () => `+=${track.scrollWidth}`,
-              pin: true,
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          });
+        gsap.to(track, {
+          x: () => -getDistance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: () => `+=${track.scrollWidth}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
         });
       });
     }, 150);
     
     return () => {
       clearTimeout(timer);
-      ctx.revert();
+      mm.revert();
     };
   }, [activeFilter]);
 
@@ -149,7 +144,6 @@ const Projects = () => {
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <motion.div
-                layout
                 key={project.title}
                 className="project-card"
                 initial={{ opacity: 0, scale: 0.9 }}

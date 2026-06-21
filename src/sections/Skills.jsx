@@ -1,140 +1,123 @@
-import { useRef, useState, useEffect } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
 
-
-const skillCategories = [
+const rings = [
   {
-    id: 'frontend',
-    label: 'Frontend',
-    icon: '✨',
-    skills: ['React.js', 'JavaScript (ES6+)', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Three.js']
+    radius: 140,
+    duration: 35,
+    reverse: false,
+    skills: ['React.js', 'Node.js', 'TypeScript', 'Python', 'Three.js']
   },
   {
-    id: 'backend',
-    label: 'Backend & Database',
-    icon: '⚙️',
-    skills: ['Node.js', 'Express.js', 'MongoDB', 'Firebase', 'REST API Design']
+    radius: 260,
+    duration: 50,
+    reverse: true,
+    skills: ['JavaScript', 'MongoDB', 'Tailwind', 'C++', 'Git', 'HTML5', 'CSS3', 'Express.js']
   },
   {
-    id: 'languages',
-    label: 'Languages',
-    icon: '💻',
-    skills: ['JavaScript', 'TypeScript', 'C++', 'Python']
-  },
-  {
-    id: 'cloud',
-    label: 'Cloud & Deployment',
-    icon: '☁️',
-    skills: ['Vercel', 'Netlify', 'Render', 'Google Cloud', 'AWS (basics)']
-  },
-  {
-    id: 'tools',
-    label: 'Tools',
-    icon: '🛠️',
-    skills: ['Git', 'GitHub', 'VS Code', 'n8n', 'Ollama']
+    radius: 380,
+    duration: 65,
+    reverse: false,
+    skills: ['Firebase', 'REST API', 'Vercel', 'Netlify', 'Render', 'Google Cloud', 'AWS', 'GitHub', 'VS Code', 'n8n', 'Ollama']
   }
 ];
 
 const Skills = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
-  const [activeCategory, setActiveCategory] = useState(skillCategories[0].id);
+  const containerRef = useRef(null);
 
-  const currentCategory = skillCategories.find(c => c.id === activeCategory);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Make the display glass float slightly slower than the tabs
-      gsap.to('.skills-display-glass', {
-        y: -40,
-        scrollTrigger: {
-          trigger: '.skills-interactive-container',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        }
-      });
-      
-      gsap.to('.skills-tabs', {
-        y: 40,
-        scrollTrigger: {
-          trigger: '.skills-interactive-container',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        }
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - left - width / 2) / (width / 2);
+    const y = (e.clientY - top - height / 2) / (height / 2);
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  // Smooth springs for magnetic tilt
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], [15, -15]), { stiffness: 150, damping: 30 });
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-15, 15]), { stiffness: 150, damping: 30 });
+
+  // Add subtle parallax on scroll
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+  const yParallax = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
     <section className="section" id="skills" ref={sectionRef}>
-
       <div className="section-container">
         <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
 
-        <div className="skills-interactive-container">
-          {/* Left Side: Tabs */}
+        <div 
+          className="skills-orbit-viewport"
+          ref={containerRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <motion.div 
-            className="skills-tabs"
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
+            className="skills-orbit-system"
+            style={{ 
+              rotateX, 
+              rotateY,
+              y: yParallax
+            }}
           >
-            {skillCategories.map((category) => (
-              <button
-                key={category.id}
-                className={`skill-tab-btn ${activeCategory === category.id ? 'active' : ''}`}
-                onClick={() => setActiveCategory(category.id)}
-              >
-                <span className="tab-icon">{category.icon}</span>
-                <span className="tab-label">{category.label}</span>
-              </button>
-            ))}
-          </motion.div>
-
-          {/* Right Side: Skill Display */}
-          <motion.div 
-            className="skills-display-area"
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="skills-display-glass">
-              <h3 className="active-category-title">
-                {currentCategory.icon} {currentCategory.label}
-              </h3>
-              
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCategory}
-                  className="skills-grid-modern"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {currentCategory.skills.map((skill, index) => (
-                    <motion.div 
-                      key={skill} 
-                      className="skill-pill"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.04, duration: 0.3, type: "spring", bounce: 0.4 }}
-                      whileHover={{ scale: 1.05, backgroundColor: 'rgba(200, 169, 125, 0.15)' }}
-                    >
-                      {skill}
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
+            {/* The Central Core */}
+            <div className="orbit-core">
+              <div className="core-glow"></div>
+              <span>Skills</span>
             </div>
+
+            {/* Orbit Rings */}
+            {rings.map((ring, ringIdx) => (
+              <div 
+                key={ringIdx}
+                className="orbit-ring-track"
+                style={{
+                  width: ring.radius * 2,
+                  height: ring.radius * 2,
+                  animation: `spin-ring ${ring.duration}s linear infinite ${ring.reverse ? 'reverse' : 'normal'}`
+                }}
+              >
+                {ring.skills.map((skill, i) => {
+                  const angle = (i / ring.skills.length) * Math.PI * 2;
+                  const x = Math.cos(angle) * ring.radius;
+                  const y = Math.sin(angle) * ring.radius;
+
+                  return (
+                    <div 
+                      key={skill}
+                      className="orbit-node-wrapper"
+                      style={{
+                        left: `calc(50% + ${x}px)`,
+                        top: `calc(50% + ${y}px)`
+                      }}
+                    >
+                      <div 
+                        className="orbit-node-inner"
+                        style={{
+                          animation: `spin-ring-counter ${ring.duration}s linear infinite ${ring.reverse ? 'reverse' : 'normal'}`
+                        }}
+                      >
+                        {skill}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>

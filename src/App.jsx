@@ -87,25 +87,13 @@ const App = () => {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
-
-    // QuickSetter for performant skewing
-    const skewSetter = gsap.quickSetter("main", "skewY", "deg");
     
-    lenis.on('scroll', (e) => {
+    lenis.on('scroll', () => {
       ScrollTrigger.update();
-      // Calculate velocity-based skew (clamped to prevent extreme distortion)
-      let skew = e.velocity * 0.05;
-      skew = Math.max(-3, Math.min(3, skew)); // Max 3 degrees skew
-      skewSetter(skew);
     });
 
-    // Reset skew when scrolling stops
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
-      // Smoothly return skew to 0 when velocity is low
-      if (Math.abs(lenis.velocity) < 0.1) {
-         gsap.to("main", { skewY: 0, duration: 0.5, ease: "power2.out", overwrite: true });
-      }
     });
 
     /* ============================
