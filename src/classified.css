@@ -23,10 +23,11 @@
   height: 100%;
   background-image: 
     radial-gradient(circle at center top, rgba(20, 25, 35, 0.4) 0%, #050505 70%),
-    url('https://images.unsplash.com/photo-1532767153582-b1a0e5145009?q=80&w=2000&auto=format&fit=crop');
+    url('/moonknight-bg.png');
   background-size: cover;
-  background-position: center 20%;
-  opacity: 0.15;
+  background-position: center top;
+  background-attachment: fixed; /* This makes it fit perfectly to the screen viewport! */
+  opacity: 0.5; /* Increased opacity to show off the cool details! */
   z-index: 0;
   pointer-events: none;
 }
