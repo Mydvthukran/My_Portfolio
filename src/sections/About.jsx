@@ -30,12 +30,14 @@ const TerminalAbout = ({ isInView }) => {
     if (!isInView || hasStarted.current) return;
     hasStarted.current = true;
 
+    let isActive = true;
+
     let idx = 0;
     const total = terminalLines.length;
     const linesRef = [...terminalLines]; // snapshot
 
     const addLine = () => {
-      if (idx >= total) return;
+      if (!isActive || idx >= total) return;
       const currentLine = linesRef[idx];
       setLines((prev) => [...prev, currentLine]);
       idx++;
@@ -43,7 +45,9 @@ const TerminalAbout = ({ isInView }) => {
       const delay = currentLine.type === 'command' ? 600 : currentLine.type === 'blank' ? 200 : 120;
       setTimeout(addLine, delay);
     };
-    setTimeout(addLine, 500);
+    setTimeout(() => { if (isActive) addLine(); }, 500);
+
+    return () => { isActive = false; };
   }, [isInView]);
 
   return (

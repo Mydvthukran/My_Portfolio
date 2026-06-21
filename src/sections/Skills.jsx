@@ -69,7 +69,7 @@ const Skills = () => {
           scrub: 1,
         }
       });
-    });
+    }, sectionRef);
     return () => ctx.revert();
   }, []);
 

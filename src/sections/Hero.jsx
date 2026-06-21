@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState, useEffect } from 'react';
+import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,20 +10,25 @@ import heroImg from '../assets/me/hero-cinematic.png';
 
 const Hero = () => {
   const [flash, setFlash] = useState(false);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     let timeoutId;
+    let isActive = true;
+    
     const triggerLightning = () => {
+      if (!isActive) return;
       // Random interval between 4s and 12s
       const nextFlash = 4000 + Math.random() * 8000;
       timeoutId = setTimeout(() => {
+        if (!isActive) return;
         setFlash(true);
         // Turn off flash quickly
-        setTimeout(() => setFlash(false), 100);
+        setTimeout(() => isActive && setFlash(false), 100);
         // Maybe a second quick flash
         if (Math.random() > 0.4) {
-          setTimeout(() => setFlash(true), 250);
-          setTimeout(() => setFlash(false), 300);
+          setTimeout(() => isActive && setFlash(true), 250);
+          setTimeout(() => isActive && setFlash(false), 300);
         }
         triggerLightning();
       }, nextFlash);
@@ -66,9 +71,10 @@ const Hero = () => {
           scrub: 0.8,
         }
       });
-    });
+    }, heroRef);
 
     return () => {
+      isActive = false;
       clearTimeout(timeoutId);
       ctx.revert();
     };
@@ -108,7 +114,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="hero-section" id="home">
+    <section className="hero-section" id="home" ref={heroRef}>
       {/* Full-bleed background image */}
       <div className="hero-image-bg">
         <motion.img

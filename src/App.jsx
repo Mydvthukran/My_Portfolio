@@ -107,15 +107,14 @@ const App = () => {
          gsap.to("main", { skewY: 0, duration: 0.5, ease: "power2.out", overwrite: true });
       }
     });
-    
-    gsap.ticker.lagSmoothing(0);
 
     /* ============================
        SCROLL ANIMATIONS (lightweight)
        ============================ */
 
-    // Dynamic Background Colors based on section
-    const sectionColors = [
+    const ctx = gsap.context(() => {
+      // Dynamic Background Colors based on section
+      const sectionColors = [
       { selector: '.hero-section', color: '#080808' },
       { selector: '#about', color: '#0d0f12' }, // slight cool tint
       { selector: '#skills', color: '#120d0f' }, // slight warm tint
@@ -187,10 +186,11 @@ const App = () => {
         );
       }
     });
+    }); // end ctx
 
     return () => {
       lenis.destroy();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
     };
   }, []);
 

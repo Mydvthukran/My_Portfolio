@@ -85,38 +85,39 @@ const Projects = () => {
   useEffect(() => {
     if (!trackRef.current || !wrapperRef.current) return;
     
-    // Give DOM time to update after filter changes
-    const timer = setTimeout(() => {
-      const track = trackRef.current;
-      const scrollWidth = track.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      
-      // Calculate how far to move left
-      const xDistance = scrollWidth - viewportWidth + 100;
-      
-      if (xDistance > 0 && window.innerWidth > 768) {
-        const tween = gsap.to(track, {
-          x: -xDistance,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: 'center center',
-            end: () => `+=${xDistance}`,
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          }
-        });
-        
-        return () => {
-          tween.kill();
-          ScrollTrigger.refresh();
-        };
-      }
-    }, 100);
+    let ctx = gsap.context(() => {});
     
-    return () => clearTimeout(timer);
-  }, [activeFilter, filteredProjects.length]);
+    // Give DOM time to update after filter changes (Framer Motion animations)
+    const timer = setTimeout(() => {
+      ctx.add(() => {
+        const track = trackRef.current;
+        
+        // Use matchMedia to handle responsive behavior
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 769px)", () => {
+          const getDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 100);
+          
+          gsap.to(track, {
+            x: () => -getDistance(),
+            ease: 'none',
+            scrollTrigger: {
+              trigger: wrapperRef.current,
+              start: 'center center',
+              end: () => `+=${getDistance()}`,
+              pin: true,
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          });
+        });
+      });
+    }, 150);
+    
+    return () => {
+      clearTimeout(timer);
+      ctx.revert();
+    };
+  }, [activeFilter]);
 
   return (
     <section className="section projects-section-wrapper" id="projects" ref={sectionRef}>
