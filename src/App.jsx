@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -82,6 +82,8 @@ const LoadingScreen = ({ onComplete }) => {
 
 const App = () => {
   const appRef = useRef(null);
+  // BUG FIX: Stable callback reference prevents LoadingScreen effect re-trigger
+  const handleLoadingComplete = useCallback(() => {}, []);
 
   useEffect(() => {
     // Initialize Lenis smooth scrolling
@@ -189,7 +191,7 @@ const App = () => {
   return (
     <EasterEggProvider>
       <div className="app-wrapper" ref={appRef}>
-        <LoadingScreen onComplete={() => {}} />
+        <LoadingScreen onComplete={handleLoadingComplete} />
         <ScrollProgress />
         <CustomCursor />
         <AmbientAudio />

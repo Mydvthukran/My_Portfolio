@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
 import { useEasterEgg } from '../context/EasterEggContext';
@@ -13,16 +13,28 @@ const orbitRings = [
   { radius: 380, duration: 65, reverse: false, skills: ['Firebase', 'REST API', 'Vercel', 'Netlify', 'Render', 'Google Cloud', 'AWS', 'GitHub', 'VS Code', 'n8n', 'Ollama'] }
 ];
 
+// Flat list for the mobile grid
+const allSkills = orbitRings.flatMap(r => r.skills);
+
 const Skills = () => {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const { themeState } = useEasterEgg();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isMobile) return;
     const { left, top, width, height } = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / (width / 2);
     const y = (e.clientY - top - height / 2) / (height / 2);
@@ -51,6 +63,46 @@ const Skills = () => {
     return <AvengersSkills />;
   }
 
+  // ─── Mobile Layout: Clean skill tag grid ───────────────────────────
+  if (isMobile) {
+    return (
+      <section className="section" id="skills" ref={sectionRef}>
+        <div className="section-container">
+          <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
+          
+          <motion.div 
+            className="avengers-skills-mobile-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.03 } }
+            }}
+          >
+            {allSkills.map((skill, index) => (
+              <motion.div
+                key={skill}
+                className="avengers-skill-tag"
+                variants={{
+                  hidden: { opacity: 0, y: 15, scale: 0.9 },
+                  visible: { 
+                    opacity: 1, y: 0, scale: 1,
+                    transition: { type: 'spring', stiffness: 250, damping: 18 }
+                  }
+                }}
+              >
+                <span className="avengers-skill-index">{String(index + 1).padStart(2, '0')}</span>
+                <span className="avengers-skill-name">{skill}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+
+  // ─── Desktop Layout: Original spinning orbit ────────────────────────
   return (
     <section className="section" id="skills" ref={sectionRef}>
       <div className="section-container">

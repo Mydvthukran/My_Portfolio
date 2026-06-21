@@ -6,9 +6,13 @@ const CustomCursor = () => {
   const target = useRef({ x: -100, y: -100 });
   const rafId = useRef(null);
 
+  // PERF: Skip entirely on touch devices — don't even mount the DOM element or RAF loop
+  const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth <= 768);
+
   useEffect(() => {
+    if (isTouchDevice) return;
     const cursor = cursorRef.current;
-    if (!cursor || 'ontouchstart' in window) return;
+    if (!cursor) return;
 
     const onMouseMove = (e) => {
       target.current.x = e.clientX;
@@ -54,6 +58,9 @@ const CustomCursor = () => {
       cancelAnimationFrame(rafId.current);
     };
   }, []);
+
+  // PERF: Don't render cursor element on touch devices
+  if (isTouchDevice) return null;
 
   return <div ref={cursorRef} className="custom-cursor" />;
 };

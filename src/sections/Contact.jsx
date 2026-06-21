@@ -1,5 +1,7 @@
+import { useEasterEgg } from '../context/EasterEggContext';
 import { useRef } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
+import AvengersContact from './AvengersContact';
 
 // Reusable Magnetic Bubble Component
 const MagneticBubble = ({ children, href }) => {
@@ -52,7 +54,7 @@ const MagneticBubble = ({ children, href }) => {
   );
 };
 
-const Contact = () => {
+const DefaultContact = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
 
@@ -134,6 +136,16 @@ const Contact = () => {
       </div>
     </section>
   );
+};
+
+const Contact = () => {
+  const { themeState } = useEasterEgg();
+
+  if (themeState === 'snapped') {
+    return <AvengersContact />;
+  }
+
+  return <DefaultContact />;
 };
 
 export default Contact;

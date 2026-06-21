@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
+import { Suspense, useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -16,7 +16,7 @@ const Hero = () => {
   const heroRef = useRef(null);
   const { themeState, triggerSnap } = useEasterEgg();
 
-  const handleGauntletClick = () => {
+  const handleGauntletClick = useCallback(() => {
     if (themeState === 'snapped' || gauntletAnimating) return;
     setGauntletAnimating(true);
     
@@ -25,25 +25,32 @@ const Hero = () => {
       triggerSnap();
       setGauntletAnimating(false);
     }, 3000);
-  };
+  }, [themeState, gauntletAnimating, triggerSnap]);
 
   useEffect(() => {
-    let timeoutId;
+    // BUG FIX: Track ALL timeouts so we can clear them on unmount
+    const timeoutIds = [];
     let isActive = true;
     
+    const safeTimeout = (fn, delay) => {
+      const id = setTimeout(fn, delay);
+      timeoutIds.push(id);
+      return id;
+    };
+
     const triggerLightning = () => {
       if (!isActive) return;
       // Random interval between 4s and 12s
       const nextFlash = 4000 + Math.random() * 8000;
-      timeoutId = setTimeout(() => {
+      safeTimeout(() => {
         if (!isActive) return;
         setFlash(true);
         // Turn off flash quickly
-        setTimeout(() => isActive && setFlash(false), 100);
+        safeTimeout(() => isActive && setFlash(false), 100);
         // Maybe a second quick flash
         if (Math.random() > 0.4) {
-          setTimeout(() => isActive && setFlash(true), 250);
-          setTimeout(() => isActive && setFlash(false), 300);
+          safeTimeout(() => isActive && setFlash(true), 250);
+          safeTimeout(() => isActive && setFlash(false), 300);
         }
         triggerLightning();
       }, nextFlash);
@@ -90,18 +97,20 @@ const Hero = () => {
 
     return () => {
       isActive = false;
-      clearTimeout(timeoutId);
+      // Clear ALL tracked timeouts
+      timeoutIds.forEach(id => clearTimeout(id));
       ctx.revert();
     };
   }, []);
 
-  const scrollTo = (id) => {
+  const scrollTo = useCallback((id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
-  // Generate dust particles
+  // Generate dust particles — fewer on mobile for performance
   const dustParticles = useMemo(() => {
-    return Array.from({ length: 15 }, (_, i) => ({
+    const count = typeof window !== 'undefined' && window.innerWidth <= 768 ? 6 : 15;
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
       delay: Math.random() * 20,

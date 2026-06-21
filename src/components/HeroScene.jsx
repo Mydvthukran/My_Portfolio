@@ -12,7 +12,8 @@ const createDrop = (id) => ({
 });
 
 const HeroScene = () => {
-  const maxDrops = 100;
+  // PERF: Fewer raindrops on mobile for smoother performance
+  const maxDrops = typeof window !== 'undefined' && window.innerWidth <= 768 ? 50 : 100;
   
   // Memoize static drops so they don't trigger re-renders
   const staticDrops = useMemo(() => {

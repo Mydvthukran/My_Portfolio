@@ -13,24 +13,31 @@ const AvengersHero = () => {
   const heroRef = useRef(null);
 
   useEffect(() => {
-    let timeoutId;
+    // BUG FIX: Track ALL timeouts for proper cleanup
+    const timeoutIds = [];
     let isActive = true;
     
+    const safeTimeout = (fn, delay) => {
+      const id = setTimeout(fn, delay);
+      timeoutIds.push(id);
+      return id;
+    };
+
     // Intense, frequent lightning for Avengers theme
     const triggerLightning = () => {
       if (!isActive) return;
       const nextFlash = 1000 + Math.random() * 3000;
-      timeoutId = setTimeout(() => {
+      safeTimeout(() => {
         if (!isActive) return;
         setFlash(true);
-        setTimeout(() => isActive && setFlash(false), 80);
+        safeTimeout(() => isActive && setFlash(false), 80);
         if (Math.random() > 0.3) {
-          setTimeout(() => isActive && setFlash(true), 150);
-          setTimeout(() => isActive && setFlash(false), 200);
+          safeTimeout(() => isActive && setFlash(true), 150);
+          safeTimeout(() => isActive && setFlash(false), 200);
         }
         if (Math.random() > 0.7) {
-          setTimeout(() => isActive && setFlash(true), 350);
-          setTimeout(() => isActive && setFlash(false), 450);
+          safeTimeout(() => isActive && setFlash(true), 350);
+          safeTimeout(() => isActive && setFlash(false), 450);
         }
         triggerLightning();
       }, nextFlash);
@@ -76,7 +83,8 @@ const AvengersHero = () => {
 
     return () => {
       isActive = false;
-      clearTimeout(timeoutId);
+      // Clear ALL tracked timeouts
+      timeoutIds.forEach(id => clearTimeout(id));
       ctx.revert();
     };
   }, []);

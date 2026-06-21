@@ -9,7 +9,7 @@ const AmbientAudio = () => {
     // Create audio element - Soft, high quality rain on roof
     const audio = new Audio('https://actions.google.com/sounds/v1/weather/rain_on_roof.ogg');
     audio.loop = true;
-    audio.volume = 1.0; // max volume
+    audio.volume = 0.3; // Gentle ambient level
     audioRef.current = audio;
 
     return () => {

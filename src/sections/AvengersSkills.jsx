@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
 
@@ -17,16 +17,39 @@ const RING_RADII = [160, 280, 420]; // Pixel radii for the concentric rings
 const SVG_SIZE = 1000;
 const CENTER = SVG_SIZE / 2;
 
+const getWebSkillPosition = (index) => {
+  const ringIndex = index % M;
+  const spokeIndex = Math.floor(index / M);
+  let angle = (spokeIndex * 360) / N;
+  let radius = RING_RADII[ringIndex];
+  
+  if (angle === 45 && ringIndex === M - 1) {
+    radius -= 60;
+    angle += 15;
+  }
+  const rad = angle * Math.PI / 180;
+  return { x: CENTER + Math.cos(rad) * radius, y: CENTER + Math.sin(rad) * radius };
+};
+
 const AvengersSkills = () => {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const prefersReducedMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isMobile) return;
     const { left, top, width, height } = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - left - width / 2) / (width / 2);
     const y = (e.clientY - top - height / 2) / (height / 2);
@@ -47,6 +70,12 @@ const AvengersSkills = () => {
     offset: ["start end", "end start"]
   });
   const yParallax = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
+  // BUG FIX: Memoize random rotation values so they don't change on re-render
+  const randomRotations = useMemo(() => 
+    skillsData.map(() => -6 + Math.random() * 12),
+    []
+  );
 
   const renderSpiderWeb = () => {
     let paths = [];
@@ -85,20 +114,46 @@ const AvengersSkills = () => {
     return paths;
   };
 
-  const getWebSkillPosition = (index) => {
-    const ringIndex = index % M;
-    const spokeIndex = Math.floor(index / M);
-    let angle = (spokeIndex * 360) / N;
-    let radius = RING_RADII[ringIndex];
-    
-    if (angle === 45 && ringIndex === M - 1) {
-      radius -= 60;
-      angle += 15;
-    }
-    const rad = angle * Math.PI / 180;
-    return { x: CENTER + Math.cos(rad) * radius, y: CENTER + Math.sin(rad) * radius };
-  };
+  // ─── Mobile Layout: Responsive skill tag grid ────────────────────────
+  if (isMobile) {
+    return (
+      <section className="section" id="skills" ref={sectionRef}>
+        <div className="section-container">
+          <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
+          
+          <motion.div 
+            className="avengers-skills-mobile-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.04 } }
+            }}
+          >
+            {skillsData.map((skill, index) => (
+              <motion.div
+                key={skill}
+                className="avengers-skill-tag"
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.8 },
+                  visible: { 
+                    opacity: 1, y: 0, scale: 1,
+                    transition: { type: 'spring', stiffness: 200, damping: 15 }
+                  }
+                }}
+              >
+                <span className="avengers-skill-index">{String(index + 1).padStart(2, '0')}</span>
+                <span className="avengers-skill-name">{skill}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
+  // ─── Desktop Layout: Original spider-web SVG ─────────────────────────
   return (
     <section className="section" id="skills" ref={sectionRef}>
       <div className="section-container">
@@ -126,7 +181,7 @@ const AvengersSkills = () => {
             </div>
             {skillsData.map((skill, index) => {
               const { x, y } = getWebSkillPosition(index);
-              const staticRotate = -6 + Math.random() * 12;
+              const staticRotate = randomRotations[index];
               const dropDelay = index * 0.05;
               
               return (
