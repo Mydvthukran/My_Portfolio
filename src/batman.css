@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+
+/* --- Colors & Variables --- */
+:root {
+  --batman-gold-light: #e8dcc4;
+  --batman-gold: #a48f65;
+  --batman-gold-dark: #6e5e3e;
+  --batman-bg: #050507;
+}
+
+/* --- Hero Section --- */
+.batman-hero-section {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--batman-bg);
+  color: #fff;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  padding-top: 80px;
+}
+
+.batman-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(to right, rgba(5,5,7,0.9) 0%, rgba(5,5,7,0.4) 50%, rgba(5,5,7,0.9) 100%),
+    url('/batman-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: 0;
+}
+
+.batman-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px;
+}
+
+/* --- Left Content --- */
+.batman-content {
+  flex: 1;
+  max-width: 600px;
+}
+
+.batman-protocol {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: monospace;
+  color: var(--batman-gold);
+  letter-spacing: 4px;
+  font-size: 0.75rem;
+  margin-bottom: 20px;
+}
+
+.batman-protocol::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--batman-gold);
+  opacity: 0.5;
+}
+
+.batman-protocol-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--batman-gold);
+  box-shadow: 0 0 10px var(--batman-gold);
+}
+
+.batman-title-small {
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
+  color: #ccc;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.batman-title-large {
+  font-family: 'Cinzel', serif;
+  font-size: 5.5rem;
+  font-weight: 700;
+  margin: -10px 0 20px 0;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, var(--batman-gold-light) 0%, var(--batman-gold) 40%, var(--batman-gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 5px 15px rgba(164, 143, 101, 0.2));
+}
+
+.batman-divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.batman-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(164,143,101,0.5), transparent);
+}
+
+.batman-divider-icon {
+  color: var(--batman-gold);
+  width: 30px;
+  margin: 0 15px;
+}
+
+.batman-subtitle {
+  font-size: 1.1rem;
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 450px;
+}
+
+/* --- Buttons --- */
+.batman-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.batman-btn {
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  padding: 15px 30px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.batman-btn-primary {
+  background: linear-gradient(135deg, var(--batman-gold-light) 0%, var(--batman-gold) 100%);
+  color: #050507;
+  border: 1px solid var(--batman-gold-light);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px rgba(164, 143, 101, 0.2);
+  font-weight: bold;
+}
+
+.batman-btn-primary:hover {
+  filter: brightness(1.2);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 30px rgba(164, 143, 101, 0.4);
+}
+
+.batman-btn-secondary {
+  background: transparent;
+  color: var(--batman-gold);
+  border: 1px solid rgba(164, 143, 101, 0.5);
+}
+
+.batman-btn-secondary:hover {
+  background: rgba(164, 143, 101, 0.1);
+  border-color: var(--batman-gold);
+}
+
+/* --- Right Content HUD --- */
+.batman-hud {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.batman-hud-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(164, 143, 101, 0.1);
+}
+
+.hud-ring-1 {
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid var(--batman-gold);
+  border-bottom: 1px solid var(--batman-gold);
+  animation: spin 30s linear infinite;
+}
+
+.hud-ring-2 {
+  width: 85%;
+  height: 85%;
+  border-left: 2px solid var(--batman-gold-dark);
+  border-right: 2px solid var(--batman-gold-dark);
+  animation: spin-reverse 20s linear infinite;
+  opacity: 0.7;
+}
+
+.hud-ring-3 {
+  width: 70%;
+  height: 70%;
+  border: 1px dashed rgba(164, 143, 101, 0.3);
+  animation: spin 40s linear infinite;
+}
+
+/* Tick marks for the HUD */
+.hud-ticks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.hud-ticks::before, .hud-ticks::after {
+  content: '';
+  position: absolute;
+  background: var(--batman-gold);
+}
+.hud-ticks.t1::before { top: 0; left: 50%; width: 2px; height: 10px; }
+.hud-ticks.t1::after { bottom: 0; left: 50%; width: 2px; height: 10px; }
+.hud-ticks.t2::before { left: 0; top: 50%; width: 10px; height: 2px; }
+.hud-ticks.t2::after { right: 0; top: 50%; width: 10px; height: 2px; }
+
+
+.batman-hud-logo {
+  width: 50%;
+  color: #111;
+  filter: drop-shadow(0 0 30px rgba(164, 143, 101, 0.5));
+  z-index: 10;
+  position: relative;
+}
+
+/* To make the black bat glow with a gold rim */
+.batman-hud-logo svg {
+  fill: #050507;
+  stroke: var(--batman-gold-light);
+  stroke-width: 0.5;
+  stroke-dasharray: 1000;
+  animation: drawLine 5s infinite alternate;
+}
+
+/* --- Scroll Indicator & Bottom Elements --- */
+.batman-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 20px;
+  z-index: 10;
+}
+
+.batman-scroll-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--batman-gold);
+  font-family: monospace;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  gap: 10px;
+}
+
+.batman-scroll-icon {
+  width: 24px;
+  animation: bounce 2s infinite;
+}
+
+.batman-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--batman-gold), transparent);
+}
+
+.batman-sound-toggle {
+  position: absolute;
+  right: 50px;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--batman-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--batman-gold);
+  cursor: pointer;
+  background: rgba(5,5,7,0.8);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.batman-sound-toggle:hover {
+  background: rgba(164, 143, 101, 0.2);
+  box-shadow: 0 0 15px rgba(164, 143, 101, 0.3);
+}
+
+/* --- Global Navbar Overrides for Batman Theme --- */
+.navbar-batman {
+  background: rgba(5, 5, 7, 0.8) !important;
+  border-bottom: 1px solid rgba(164, 143, 101, 0.2);
+  position: relative;
+}
+
+/* Corner cutouts for navbar */
+.navbar-batman::after, .navbar-batman::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  width: 20px;
+  height: 1px;
+  background: var(--batman-gold);
+}
+.navbar-batman::before { left: 10%; }
+.navbar-batman::after { right: 10%; }
+
+.navbar-batman .navbar-logo {
+  font-family: 'Cinzel', serif;
+  color: var(--batman-gold-light);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  letter-spacing: 2px;
+}
+
+.navbar-batman .navbar-link {
+  font-family: monospace;
+  color: #888;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  position: relative;
+}
+
+.navbar-batman .navbar-link:hover, .navbar-batman .navbar-link.active {
+  color: var(--batman-gold);
+}
+
+.navbar-batman .navbar-link.active::after {
+  display: none; /* Hide default underline */
+}
+
+/* Small active bat icon */
+.nav-active-bat {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  color: var(--batman-gold);
+}
+
+/* --- Animations --- */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+@keyframes bounce { 
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+@keyframes drawLine {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 1024px) {
+  .batman-container { flex-direction: column; padding-top: 100px; text-align: center; }
+  .batman-hud { width: 400px; height: 400px; margin-top: 50px; }
+  .batman-title-large { font-size: 3.5rem; }
+  .batman-divider { justify-content: center; }
+  .batman-actions { justify-content: center; }
+}

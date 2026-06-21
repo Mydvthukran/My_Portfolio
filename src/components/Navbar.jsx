@@ -1,5 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
+const BatIcon = ({ className, style }) => (
+  <svg className={className} style={style} viewBox="0 0 100 50" fill="currentColor">
+    <path d="M50 48s-15-20-30-25c-8-3-20 2-20 2s5-15 20-20c10-3 15 5 15 5s2-5 6-8l3 5 6-5 3 8s5-8 15-5c15 5 20 20 20 20s-12-5-20-2c-15 5-30 25-30 25z"/>
+  </svg>
+);
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,9 +54,10 @@ const Navbar = () => {
   ];
 
   return (
-    <header className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
+    <header className={`navbar navbar-batman ${scrolled ? 'scrolled' : ''}`} id="navbar">
       <div className="navbar-inner">
         <a className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollTo('home'); }} href="#home">
+          <BatIcon className="w-8 h-4" style={{ width: '40px', height: '20px' }} />
           Manish
         </a>
 
@@ -67,6 +74,11 @@ const Navbar = () => {
               href={`#${link.id}`}
             >
               {link.label}
+              {activeSection === link.id && (
+                <div className="nav-active-bat">
+                  <BatIcon style={{ width: '100%', height: '100%' }} />
+                </div>
+              )}
             </a>
           ))}
         </nav>

@@ -1,108 +1,19 @@
-import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import '../batman.css';
 
-gsap.registerPlugin(ScrollTrigger);
-import HeroScene from '../components/HeroScene';
-import MagneticButton from '../components/MagneticButton';
-import heroImg from '../assets/me/hero-cinematic.png';
+const BatIcon = ({ className, style }) => (
+  <svg className={className} style={style} viewBox="0 0 100 50" fill="currentColor">
+    <path d="M50 48s-15-20-30-25c-8-3-20 2-20 2s5-15 20-20c10-3 15 5 15 5s2-5 6-8l3 5 6-5 3 8s5-8 15-5c15 5 20 20 20 20s-12-5-20-2c-15 5-30 25-30 25z"/>
+  </svg>
+);
 
 const AvengersHero = () => {
-  const [flash, setFlash] = useState(false);
   const heroRef = useRef(null);
-
-  useEffect(() => {
-    // BUG FIX: Track ALL timeouts for proper cleanup
-    const timeoutIds = [];
-    let isActive = true;
-    
-    const safeTimeout = (fn, delay) => {
-      const id = setTimeout(fn, delay);
-      timeoutIds.push(id);
-      return id;
-    };
-
-    // Intense, frequent lightning for Avengers theme
-    const triggerLightning = () => {
-      if (!isActive) return;
-      const nextFlash = 1000 + Math.random() * 3000;
-      safeTimeout(() => {
-        if (!isActive) return;
-        setFlash(true);
-        safeTimeout(() => isActive && setFlash(false), 80);
-        if (Math.random() > 0.3) {
-          safeTimeout(() => isActive && setFlash(true), 150);
-          safeTimeout(() => isActive && setFlash(false), 200);
-        }
-        if (Math.random() > 0.7) {
-          safeTimeout(() => isActive && setFlash(true), 350);
-          safeTimeout(() => isActive && setFlash(false), 450);
-        }
-        triggerLightning();
-      }, nextFlash);
-    };
-
-    triggerLightning();
-
-    const ctx = gsap.context(() => {
-      gsap.to('.hero-heading-line1', {
-        yPercent: -150,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        }
-      });
-      
-      gsap.to('.name-line', {
-        yPercent: -200,
-        scale: 0.9,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.2,
-        }
-      });
-
-      gsap.to('.hero-subtitle', {
-        yPercent: -100,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.8,
-        }
-      });
-    }, heroRef);
-
-    return () => {
-      isActive = false;
-      // Clear ALL tracked timeouts
-      timeoutIds.forEach(id => clearTimeout(id));
-      ctx.revert();
-    };
-  }, []);
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // Aggressive ash/dust particles
-  const dustParticles = useMemo(() => {
-    return Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 10,
-      duration: 5 + Math.random() * 15,
-      size: 2 + Math.random() * 4,
-    }));
-  }, []);
 
   const container = {
     hidden: { opacity: 0 },
@@ -117,145 +28,95 @@ const AvengersHero = () => {
     show: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
   };
 
-  const fadeRight = {
-    hidden: { opacity: 0, x: -30 },
-    show: { opacity: 1, x: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } }
-  };
-
   return (
-    <section className="hero-section" id="home" ref={heroRef}>
-      <div className="hero-image-bg" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: '10%' }}>
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0, rotate: -90 }}
-          animate={{ scale: 1, opacity: 0.3, rotate: 0 }}
-          transition={{ duration: 3, ease: "easeOut" }}
-          style={{ width: '600px', height: '600px', position: 'relative' }}
+    <section className="batman-hero-section" id="home" ref={heroRef}>
+      <div className="batman-bg-image"></div>
+      
+      <div className="batman-container">
+        
+        {/* Left Side Content */}
+        <motion.div 
+          className="batman-content"
+          variants={container}
+          initial="hidden"
+          animate="show"
         >
-          {/* Outer rotating ring */}
-          <motion.svg 
-            viewBox="0 0 100 100" 
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
-            <circle cx="50" cy="50" r="48" fill="none" stroke="#ff4d4d" strokeWidth="0.5" strokeDasharray="4 8" />
-            <circle cx="50" cy="50" r="42" fill="none" stroke="#ff4d4d" strokeWidth="1" strokeDasharray="20 10 5 10" />
-            <path d="M 50 2 L 50 8 M 50 92 L 50 98 M 2 50 L 8 50 M 92 50 L 98 50" stroke="#ff4d4d" strokeWidth="1.5" />
-          </motion.svg>
+          <motion.div className="batman-protocol" variants={item}>
+            <span className="batman-protocol-dot"></span>
+            PROTOCOL: ENDGAME
+          </motion.div>
+
+          <motion.h2 className="batman-title-small" variants={item}>
+            I AM
+          </motion.h2>
+
+          <motion.h1 className="batman-title-large" variants={item}>
+            INEVITABLE.
+          </motion.h1>
+
+          <motion.div className="batman-divider" variants={item}>
+            <BatIcon className="batman-divider-icon" />
+            <div className="batman-divider-line"></div>
+          </motion.div>
+
+          <motion.p className="batman-subtitle" variants={item}>
+            I build digital experiences that are powerful, intuitive and leave a lasting impact.
+          </motion.p>
+
+          <motion.div className="batman-actions" variants={item}>
+            <button className="batman-btn batman-btn-primary" onClick={() => scrollTo('about')}>
+              ACKNOWLEDGE
+            </button>
+            <button className="batman-btn batman-btn-secondary" onClick={() => scrollTo('projects')}>
+              VIEW ARSENAL
+            </button>
+          </motion.div>
+        </motion.div>
+
+        {/* Right Side HUD */}
+        <motion.div 
+          className="batman-hud"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
+        >
+          <div className="batman-hud-ring hud-ring-1"></div>
+          <div className="batman-hud-ring hud-ring-2"></div>
+          <div className="batman-hud-ring hud-ring-3"></div>
           
-          {/* Inner counter-rotating ring */}
-          <motion.svg 
-            viewBox="0 0 100 100" 
-            style={{ position: 'absolute', top: '10%', left: '10%', width: '80%', height: '80%' }}
-            animate={{ rotate: -360 }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          >
-            <circle cx="50" cy="50" r="45" fill="none" stroke="#ff4d4d" strokeWidth="0.5" strokeDasharray="2 4" />
-            <polygon points="50,10 60,30 85,35 65,55 70,80 50,65 30,80 35,55 15,35 40,30" fill="none" stroke="#ff4d4d" strokeWidth="0.5" />
-          </motion.svg>
-          
-          {/* Core glow */}
-          <div style={{ 
-            position: 'absolute', top: '40%', left: '40%', width: '20%', height: '20%', 
-            background: 'radial-gradient(circle, rgba(255,77,77,0.8) 0%, rgba(255,77,77,0) 70%)',
-            animation: 'pulse-red 2s infinite alternate' 
-          }} />
+          <div className="hud-ticks t1"></div>
+          <div className="hud-ticks t2"></div>
+
+          <div className="batman-hud-logo">
+            <BatIcon style={{ width: '100%', height: '100%' }} />
+          </div>
+        </motion.div>
+
+      </div>
+
+      {/* Bottom Scroll Bar & Utilities */}
+      <div className="batman-bottom-bar">
+        <motion.div 
+          className="batman-scroll-indicator"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+        >
+          <span>SCROLL</span>
+          <BatIcon className="batman-scroll-icon" />
+          <div className="batman-scroll-line"></div>
+        </motion.div>
+
+        <motion.div 
+          className="batman-sound-toggle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+        >
+          <BatIcon style={{ width: '20px', height: '20px' }} />
         </motion.div>
       </div>
 
-      <div className="hero-overlay-top" />
-      <div className="hero-overlay-bottom" />
-      <div className="hero-overlay-vignette" />
-      <div className={`lightning-flash ${flash ? 'active' : ''}`} style={{ background: 'rgba(255,0,0,0.2)' }} />
-
-      <div className="hero-particles">
-        {dustParticles.map((p) => (
-          <div
-            key={p.id}
-            className="hero-dust"
-            style={{
-              left: `${p.left}%`,
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              animationDelay: `${p.delay}s`,
-              animationDuration: `${p.duration}s`,
-              background: 'rgba(200, 50, 50, 0.8)',
-            }}
-          />
-        ))}
-      </div>
-
-      <Suspense fallback={null}>
-        <HeroScene />
-      </Suspense>
-
-      <motion.div
-        className="hero-content"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        <motion.div className="hero-eyebrow" variants={fadeRight} style={{ color: '#ff4d4d', fontFamily: 'monospace' }}>
-          <span className="hero-eyebrow-line" style={{ background: '#ff4d4d' }} />
-          <span className="hero-eyebrow-dot" style={{ background: '#ff4d4d' }} />
-          PROTOCOL: ENDGAME
-        </motion.div>
-
-        <motion.h1 className="hero-heading" variants={item}>
-          <span className="hero-heading-line1" style={{ color: '#aaa', textTransform: 'uppercase' }}>I am</span>
-          <span className="name-line" style={{ color: '#ff4d4d', textTransform: 'uppercase', textShadow: '0 0 20px rgba(229,9,20,0.8)' }}>Inevitable.</span>
-        </motion.h1>
-
-        <motion.p className="hero-subtitle" variants={item} style={{ fontFamily: 'monospace', color: '#ff4d4d' }}>
-          Manish Yadav — Threat Level: MAXIMUM.<br/>
-          Securing the perimeter.
-        </motion.p>
-
-        <motion.div className="hero-actions" variants={item}>
-          <MagneticButton
-            className="magnetic-btn-primary"
-            onClick={() => scrollTo('about')}
-            style={{ background: '#ff4d4d', color: '#000', borderColor: '#ff4d4d' }}
-          >
-            Acknowledge
-          </MagneticButton>
-          <MagneticButton
-            className="magnetic-btn-secondary"
-            onClick={() => scrollTo('projects')}
-            style={{ color: '#ff4d4d', borderColor: '#ff4d4d' }}
-          >
-            View Arsenal
-          </MagneticButton>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="hero-socials"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <a href="https://github.com/Mydvthukran" target="_blank" rel="noopener noreferrer" className="social-link" style={{ color: '#ff4d4d' }}>
-          <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        </a>
-      </motion.div>
-
-      <motion.div
-        className="scroll-indicator"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 2 }}
-      >
-        <div className="scroll-line" style={{ background: '#ff4d4d' }} />
-        <span className="scroll-text" style={{ color: '#ff4d4d' }}>Scroll</span>
-      </motion.div>
-
-      <div className="hero-marquee">
-        <div className="hero-marquee-inner">
-          <span className="hero-marquee-text" style={{ color: 'rgba(255,77,77,0.1)' }}>S.H.I.E.L.D. MAINFRAME // CLASSIFIED ACCESS // OMEGA LEVEL CLEARANCE </span>
-          <span className="hero-marquee-text" style={{ color: 'rgba(255,77,77,0.1)' }}>S.H.I.E.L.D. MAINFRAME // CLASSIFIED ACCESS // OMEGA LEVEL CLEARANCE </span>
-        </div>
-      </div>
     </section>
   );
 };
