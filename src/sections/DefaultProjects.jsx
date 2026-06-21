@@ -120,7 +120,8 @@ const Projects = () => {
   }, [activeFilter]);
 
   return (
-    <section className="section projects-section-wrapper" id="projects" ref={sectionRef}>
+    <div>
+      <section className="section projects-section-wrapper" id="projects" ref={sectionRef}>
 
       <div className="section-container projects-scroll-wrapper" ref={wrapperRef}>
         <SectionTitle label="Portfolio" title="Featured" titleAccent="Work" />
@@ -205,6 +206,7 @@ const Projects = () => {
         </motion.div>
       </div>
     </section>
+    </div>
   );
 };
 
