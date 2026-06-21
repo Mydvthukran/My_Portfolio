@@ -175,9 +175,7 @@ body::after {
   opacity: 1;
 }
 
-.custom-cursor.clicking {
-  /* Scale is now handled dynamically in CustomCursor.jsx for performance */
-}
+
 
 @media (max-width: 768px) {
   .custom-cursor { display: none !important; }
@@ -1869,4 +1867,188 @@ body::after {
     text-align: center;
     gap: 20px;
   }
+}
+
+/* =====================================================================
+   AVENGERS EASTER EGG STYLES
+   ===================================================================== */
+body.theme-avengers {
+  --accent: #e50914; /* Avengers Red */
+  --accent-dim: rgba(229, 9, 20, 0.4);
+  --accent-light: #ff4d4d;
+  --bg-deep: #0a0303; /* Very dark blood red */
+}
+
+/* Flash Effects */
+.snap-flash {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 999999;
+  animation: flashAnim 1.5s ease-out forwards;
+  pointer-events: none;
+}
+.iron-flash {
+  background: #00e5ff; /* Arc reactor blue */
+}
+@keyframes flashAnim {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Dusting Animation */
+.dusted {
+  animation: dissolveToDust 2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+  pointer-events: none !important;
+}
+
+@keyframes dissolveToDust {
+  0% { opacity: 1; filter: blur(0) contrast(1); transform: translateY(0) scale(1); }
+  50% { opacity: 0.5; filter: blur(5px) contrast(2); transform: translateY(-20px) scale(0.95); }
+  100% { opacity: 0; filter: blur(20px) contrast(0); transform: translateY(-50px) scale(0.8); }
+}
+
+/* Gauntlet Button */
+.gauntlet-btn {
+  position: absolute;
+  top: 120px;
+  right: 6%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37; /* Gold */
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: floatGauntlet 3s ease-in-out infinite;
+}
+
+.gauntlet-btn:hover {
+  background: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  transform: scale(1.1);
+}
+
+@keyframes floatGauntlet {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Spider Web Overlay */
+.spider-web-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: webFadeIn 1s ease-out 1.5s forwards;
+}
+
+.spider-web-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+}
+
+@keyframes webFadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Arc Reactor Button (Iron Man Rescue) */
+.arc-reactor-container {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 99999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-direction: row-reverse;
+}
+
+.arc-tooltip {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #00e5ff;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+}
+
+.arc-reactor-container:hover .arc-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.arc-reactor {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #021a24;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.5), inset 0 0 20px rgba(0, 229, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.arc-reactor:hover {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.8), inset 0 0 30px rgba(0, 229, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.arc-core {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #fff, 0 0 20px #00e5ff, 0 0 40px #00e5ff;
+  z-index: 2;
+  animation: arcPulse 2s infinite alternate;
+}
+
+.arc-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 229, 255, 0.6);
+  z-index: 1;
+  animation: arcSpin 10s linear infinite;
+}
+
+.arc-ring.r1 {
+  width: 44px;
+  height: 44px;
+  border-width: 3px;
+}
+
+.arc-ring.r2 {
+  width: 52px;
+  height: 52px;
+  animation-direction: reverse;
+  animation-duration: 15s;
+}
+
+@keyframes arcPulse {
+  0% { box-shadow: 0 0 10px #fff, 0 0 20px #00e5ff, 0 0 40px #00e5ff; }
+  100% { box-shadow: 0 0 15px #fff, 0 0 30px #00e5ff, 0 0 60px #00e5ff; }
+}
+
+@keyframes arcSpin {
+  100% { transform: rotate(360deg); }
 }

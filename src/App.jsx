@@ -7,12 +7,15 @@ import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
 import AmbientAudio from './components/AmbientAudio';
+import ArcReactor from './components/ArcReactor';
 
 import Hero from './sections/Hero';
 import About from './sections/About';
 import Skills from './sections/Skills';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+
+import { EasterEggProvider } from './context/EasterEggContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -184,21 +187,24 @@ const App = () => {
   }, []);
 
   return (
-    <div className="app-wrapper" ref={appRef}>
-      <LoadingScreen onComplete={() => {}} />
-      <ScrollProgress />
-      <CustomCursor />
-      <AmbientAudio />
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <EasterEggProvider>
+      <div className="app-wrapper" ref={appRef}>
+        <LoadingScreen onComplete={() => {}} />
+        <ScrollProgress />
+        <CustomCursor />
+        <AmbientAudio />
+        <ArcReactor />
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </EasterEggProvider>
   );
 };
 

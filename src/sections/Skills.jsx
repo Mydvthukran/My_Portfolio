@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
+import { useEasterEgg } from '../context/EasterEggContext';
 
 const rings = [
   {
@@ -26,6 +27,7 @@ const rings = [
 const Skills = () => {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
+  const { themeState } = useEasterEgg();
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -74,6 +76,20 @@ const Skills = () => {
               y: yParallax
             }}
           >
+            {/* Spiderman Web Overlay */}
+            {themeState === 'snapped' && (
+              <div className="spider-web-overlay">
+                <svg viewBox="0 0 100 100" className="spider-web-svg">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(200,50,50,0.2)" strokeWidth="0.5"/>
+                  <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(200,50,50,0.2)" strokeWidth="0.5"/>
+                  <circle cx="50" cy="50" r="15" fill="none" stroke="rgba(200,50,50,0.2)" strokeWidth="0.5"/>
+                  {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                    <line key={deg} x1="50" y1="50" x2="50" y2="5" stroke="rgba(200,50,50,0.2)" strokeWidth="0.5" transform={`rotate(${deg} 50 50)`} />
+                  ))}
+                </svg>
+              </div>
+            )}
+
             {/* The Central Core */}
             <div className="orbit-core">
               <div className="core-glow"></div>
@@ -95,11 +111,12 @@ const Skills = () => {
                   const angle = (i / ring.skills.length) * Math.PI * 2;
                   const x = Math.cos(angle) * ring.radius;
                   const y = Math.sin(angle) * ring.radius;
+                  const isDusted = themeState === 'snapped' && i % 2 === 0;
 
                   return (
                     <div 
                       key={skill}
-                      className="orbit-node-wrapper"
+                      className={`orbit-node-wrapper ${isDusted ? 'dusted' : ''}`}
                       style={{
                         left: `calc(50% + ${x}px)`,
                         top: `calc(50% + ${y}px)`

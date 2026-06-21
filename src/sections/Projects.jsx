@@ -4,6 +4,7 @@ import SectionTitle from '../components/SectionTitle';
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEasterEgg } from '../context/EasterEggContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +14,7 @@ const Projects = () => {
   const wrapperRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
   const [activeFilter, setActiveFilter] = useState('All');
+  const { themeState } = useEasterEgg();
 
   const filters = ['All', 'React', 'Python', 'AI', 'Full Stack'];
 
@@ -142,10 +144,12 @@ const Projects = () => {
 
         <div className="projects-horizontal-track" ref={trackRef}>
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
+            {filteredProjects.map((project, i) => {
+              const isDusted = themeState === 'snapped' && i % 2 !== 0;
+              return (
               <motion.div
                 key={project.title}
-                className="project-card"
+                className={`project-card ${isDusted ? 'dusted' : ''}`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -185,7 +189,7 @@ const Projects = () => {
                 ))}
               </div>
               </motion.div>
-            ))}
+            )})}
           </AnimatePresence>
         </div>
 
