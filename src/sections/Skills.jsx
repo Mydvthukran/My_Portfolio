@@ -1,7 +1,11 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import SectionTitle from '../components/SectionTitle';
-import CurtainTransition from '../components/CurtainTransition';
+import SectionTransition from '../components/SectionTransition';
 
 const skillCategories = [
   {
@@ -43,9 +47,35 @@ const Skills = () => {
 
   const currentCategory = skillCategories.find(c => c.id === activeCategory);
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Make the display glass float slightly slower than the tabs
+      gsap.to('.skills-display-glass', {
+        y: -40,
+        scrollTrigger: {
+          trigger: '.skills-interactive-container',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+      
+      gsap.to('.skills-tabs', {
+        y: 40,
+        scrollTrigger: {
+          trigger: '.skills-interactive-container',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section className="section" id="skills" ref={sectionRef}>
-      <CurtainTransition isInView={isInView} />
+      <SectionTransition isInView={isInView} type="split" />
       <div className="section-container">
         <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
 

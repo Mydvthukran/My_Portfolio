@@ -88,13 +88,50 @@ const App = () => {
       smoothWheel: true,
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    // QuickSetter for performant skewing
+    const skewSetter = gsap.quickSetter("main", "skewY", "deg");
+    
+    lenis.on('scroll', (e) => {
+      ScrollTrigger.update();
+      // Calculate velocity-based skew (clamped to prevent extreme distortion)
+      let skew = e.velocity * 0.05;
+      skew = Math.max(-3, Math.min(3, skew)); // Max 3 degrees skew
+      skewSetter(skew);
+    });
+
+    // Reset skew when scrolling stops
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+      // Smoothly return skew to 0 when velocity is low
+      if (Math.abs(lenis.velocity) < 0.1) {
+         gsap.to("main", { skewY: 0, duration: 0.5, ease: "power2.out", overwrite: true });
+      }
+    });
+    
     gsap.ticker.lagSmoothing(0);
 
     /* ============================
        SCROLL ANIMATIONS (lightweight)
        ============================ */
+
+    // Dynamic Background Colors based on section
+    const sectionColors = [
+      { selector: '.hero-section', color: '#080808' },
+      { selector: '#about', color: '#0d0f12' }, // slight cool tint
+      { selector: '#skills', color: '#120d0f' }, // slight warm tint
+      { selector: '#projects', color: '#0a0a0a' },
+      { selector: '#contact', color: '#050505' }
+    ];
+
+    sectionColors.forEach((sec) => {
+      ScrollTrigger.create({
+        trigger: sec.selector,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => gsap.to('body', { backgroundColor: sec.color, duration: 1.2, ease: "power2.out" }),
+        onEnterBack: () => gsap.to('body', { backgroundColor: sec.color, duration: 1.2, ease: "power2.out" }),
+      });
+    });
 
     // 1. Hero parallax — image moves slower (keeps hero text ALWAYS visible)
     const heroImg = document.querySelector('.hero-image-bg img');
@@ -109,8 +146,6 @@ const App = () => {
         },
       });
     }
-
-    // NOTE: No hero content fade — so text stays visible when scrolling back up
 
     // 2. Sections fade in (one-time, not scrub — lighter on GPU)
     const sections = gsap.utils.toArray('.section');

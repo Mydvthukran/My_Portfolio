@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
-import CurtainTransition from '../components/CurtainTransition';
+import SectionTransition from '../components/SectionTransition';
 
 const Contact = () => {
   const sectionRef = useRef(null);
@@ -61,7 +61,7 @@ const Contact = () => {
 
   return (
     <section className="section" id="contact" ref={sectionRef}>
-      <CurtainTransition isInView={isInView} />
+      <SectionTransition isInView={isInView} type="blocks" />
       <div className="section-container">
         <SectionTitle label="Connect" title="Let's" titleAccent="Talk" />
 

@@ -1,5 +1,9 @@
 import { Suspense, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import HeroScene from '../components/HeroScene';
 import MagneticButton from '../components/MagneticButton';
 import heroImg from '../assets/me/hero-cinematic.png';
@@ -26,7 +30,48 @@ const Hero = () => {
     };
 
     triggerLightning();
-    return () => clearTimeout(timeoutId);
+
+    // Cinematic Text Scrub Parallax
+    const ctx = gsap.context(() => {
+      gsap.to('.hero-heading-line1', {
+        yPercent: -150,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '.hero-section',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+      
+      gsap.to('.name-line', {
+        yPercent: -200,
+        scale: 0.9,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '.hero-section',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+        }
+      });
+
+      gsap.to('.hero-subtitle', {
+        yPercent: -100,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: '.hero-section',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8,
+        }
+      });
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      ctx.revert();
+    };
   }, []);
 
   const scrollTo = (id) => {

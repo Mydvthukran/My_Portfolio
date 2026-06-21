@@ -1,10 +1,16 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
-import CurtainTransition from '../components/CurtainTransition';
+import SectionTransition from '../components/SectionTransition';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Projects = () => {
   const sectionRef = useRef(null);
+  const trackRef = useRef(null);
+  const wrapperRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
   const [activeFilter, setActiveFilter] = useState('All');
 
@@ -75,10 +81,47 @@ const Projects = () => {
     return true;
   });
 
+  // Setup Horizontal Scroll
+  useEffect(() => {
+    if (!trackRef.current || !wrapperRef.current) return;
+    
+    // Give DOM time to update after filter changes
+    const timer = setTimeout(() => {
+      const track = trackRef.current;
+      const scrollWidth = track.scrollWidth;
+      const viewportWidth = window.innerWidth;
+      
+      // Calculate how far to move left
+      const xDistance = scrollWidth - viewportWidth + 100;
+      
+      if (xDistance > 0 && window.innerWidth > 768) {
+        const tween = gsap.to(track, {
+          x: -xDistance,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: 'center center',
+            end: () => `+=${xDistance}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+        
+        return () => {
+          tween.kill();
+          ScrollTrigger.refresh();
+        };
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [activeFilter, filteredProjects.length]);
+
   return (
-    <section className="section" id="projects" ref={sectionRef}>
-      <CurtainTransition isInView={isInView} />
-      <div className="section-container">
+    <section className="section projects-section-wrapper" id="projects" ref={sectionRef}>
+      <SectionTransition isInView={isInView} type="slide" />
+      <div className="section-container projects-scroll-wrapper" ref={wrapperRef}>
         <SectionTitle label="Portfolio" title="Featured" titleAccent="Work" />
 
         <motion.div 
@@ -98,7 +141,7 @@ const Projects = () => {
           ))}
         </motion.div>
 
-        <motion.div layout className="projects-grid">
+        <div className="projects-horizontal-track" ref={trackRef}>
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <motion.div
@@ -146,7 +189,7 @@ const Projects = () => {
               </motion.div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         <motion.div
           className="github-cta"

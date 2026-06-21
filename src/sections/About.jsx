@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import CurtainTransition from '../components/CurtainTransition';
+import SectionTransition from '../components/SectionTransition';
 
 const terminalLines = [
   { type: 'command', text: 'whoami' },
@@ -118,7 +118,7 @@ const About = () => {
 
   return (
     <section className="section" id="about" ref={sectionRef}>
-      <CurtainTransition isInView={isInView} />
+      <SectionTransition isInView={isInView} type="curtain" />
       <div className="section-container">
         <div className="about-grid">
           {/* Interactive terminal instead of static photo */}
