@@ -1886,8 +1886,19 @@ body.theme-avengers .skills-orbit-system {
 }
 
 body.theme-avengers .orbit-ring-track,
-body.theme-avengers .orbit-node-inner {
+body.theme-avengers .orbit-node-wrapper {
   animation-play-state: paused !important;
+}
+
+body.theme-avengers .orbit-node-inner {
+  transform: rotateX(-65deg) scale(1.2) !important; /* Stand up to face the camera so it is readable */
+  animation-play-state: paused !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Pop-up shadow */
+}
+
+body.theme-avengers .orbit-core {
+  transform: rotateX(-65deg) translateZ(30px) !important;
+  box-shadow: 0 30px 40px rgba(0,0,0,0.8) !important;
 }
 
 /* Flash Effects */
