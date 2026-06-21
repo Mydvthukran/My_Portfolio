@@ -8,11 +8,24 @@ import HeroScene from '../components/HeroScene';
 import MagneticButton from '../components/MagneticButton';
 import heroImg from '../assets/me/hero-cinematic.png';
 import { useEasterEgg } from '../context/EasterEggContext';
+import gauntletImg from '../assets/easter-egg/gauntlet.png';
 
 const Hero = () => {
   const [flash, setFlash] = useState(false);
+  const [gauntletAnimating, setGauntletAnimating] = useState(false);
   const heroRef = useRef(null);
   const { themeState, triggerSnap } = useEasterEgg();
+
+  const handleGauntletClick = () => {
+    if (themeState === 'snapped' || gauntletAnimating) return;
+    setGauntletAnimating(true);
+    
+    // Wait 3 seconds for animation to hold in center, then trigger snap
+    setTimeout(() => {
+      triggerSnap();
+      setGauntletAnimating(false);
+    }, 3000);
+  };
 
   useEffect(() => {
     let timeoutId;
@@ -215,19 +228,17 @@ const Hero = () => {
 
       {/* Thanos Gauntlet Easter Egg Trigger */}
       {themeState !== 'snapped' && (
-        <motion.button 
-          className="gauntlet-btn"
-          onClick={triggerSnap}
+        <motion.div 
+          className={`gauntlet-btn ${gauntletAnimating ? 'animating' : ''}`}
+          onClick={handleGauntletClick}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.5, duration: 1 }}
           title="I am inevitable..."
           aria-label="Thanos Snap Trigger"
         >
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-            <path d="M14.5,2C13.67,2 13,2.67 13,3.5V8.5H11V3.5C11,2.67 10.33,2 9.5,2C8.67,2 8,2.67 8,3.5V8.5H6V4.5C6,3.67 5.33,3 4.5,3C3.67,3 3,3.67 3,4.5V13.5C3,16.5 5.5,19 8.5,19H13C16.31,19 19,16.31 19,13V8.5C19,7.67 18.33,7 17.5,7C16.67,7 16,7.67 16,8.5V9.5H14.5V3.5C14.5,2.67 13.83,2 13.5,2H14.5Z" />
-          </svg>
-        </motion.button>
+          <img src={gauntletImg} alt="Infinity Gauntlet" className="gauntlet-img" />
+        </motion.div>
       )}
 
       {/* Scroll indicator */}
