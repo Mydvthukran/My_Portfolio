@@ -170,6 +170,96 @@ const HangingOrb = ({ item, position, index, isInView }) => {
   );
 };
 
+// ─── Hanging Spiderman ────────────────────────────────────────────────────────
+const HangingSpiderman = ({ isInView }) => {
+  const ref = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { stiffness: 120, damping: 15, mass: 0.3 };
+  const x = useSpring(mouseX, springConfig);
+  const y = useSpring(mouseY, springConfig);
+
+  const handleMouse = (e) => {
+    if (!ref.current) return;
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    mouseX.set(middleX * 0.2);
+    mouseY.set(middleY * 0.1);
+  };
+
+  const reset = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  return (
+    <motion.div
+      className="web-hang-column"
+      style={{ left: '92%', zIndex: 20 }}
+      initial={{ opacity: 0, y: -300 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ 
+        type: 'spring',
+        stiffness: 40,
+        damping: 10,
+        delay: 1.5 
+      }}
+    >
+      {/* Thread */}
+      <svg 
+        className="web-thread-svg" 
+        width="40" 
+        height="180"
+        viewBox="0 0 40 180"
+      >
+        <path 
+          d="M 20 0 L 20 180"
+          stroke="rgba(255, 255, 255, 0.8)" 
+          strokeWidth="1.5" 
+          fill="none"
+          strokeDasharray="4 2"
+        />
+        <path d="M 10 180 Q 20 170 30 180" stroke="rgba(255,255,255,0.7)" strokeWidth="1" fill="none" />
+      </svg>
+
+      {/* Spiderman */}
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMouse}
+        onMouseLeave={reset}
+        style={{ x, y, cursor: 'grab', marginTop: '-5px' }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ cursor: 'grabbing', scale: 0.95 }}
+        animate={{ 
+          rotate: [0, 3, 0, -3, 0],
+        }}
+        transition={{ 
+          duration: 5, 
+          repeat: Infinity, 
+          ease: 'easeInOut',
+        }}
+      >
+        <svg width="60" height="90" viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 10px 15px rgba(229,9,20,0.6))' }}>
+          {/* Head (Upside down: chin at y=15, top of head at y=80) */}
+          <path d="M 30 10 C 15 15 5 40 10 65 C 15 90 45 90 50 65 C 55 40 45 15 30 10 Z" fill="#E23636" stroke="#000" strokeWidth="2" />
+          
+          {/* Web pattern on face */}
+          <path d="M 30 10 L 30 90 M 15 25 L 45 25 M 8 45 L 52 45 M 8 65 L 52 65 M 30 45 L 10 15 M 30 45 L 50 15 M 30 45 L 5 80 M 30 45 L 55 80" stroke="#000" strokeWidth="1" opacity="0.6" />
+          
+          {/* Left Eye (near chin at top) */}
+          <path d="M 27 28 C 27 28 15 22 10 40 C 10 40 20 35 27 28 Z" fill="#FFF" stroke="#000" strokeWidth="2" />
+          
+          {/* Right Eye */}
+          <path d="M 33 28 C 33 28 45 22 50 40 C 50 40 40 35 33 28 Z" fill="#FFF" stroke="#000" strokeWidth="2" />
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+
 // ─── Main Component ──────────────────────────────────────────────────────────
 const AvengersContact = () => {
   const sectionRef = useRef(null);
@@ -255,6 +345,9 @@ const AvengersContact = () => {
               isInView={isInView}
             />
           ))}
+
+          {/* Upside Down Spiderman */}
+          <HangingSpiderman isInView={isInView} />
         </div>
       </div>
       
