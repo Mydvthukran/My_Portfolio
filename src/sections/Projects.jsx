@@ -145,11 +145,10 @@ const Projects = () => {
         <div className="projects-horizontal-track" ref={trackRef}>
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, i) => {
-              const isDusted = themeState === 'snapped' && i % 2 !== 0;
               return (
               <motion.div
                 key={project.title}
-                className={`project-card ${isDusted ? 'dusted' : ''}`}
+                className={`project-card`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
