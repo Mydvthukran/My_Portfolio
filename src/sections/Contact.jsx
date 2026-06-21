@@ -1,25 +1,35 @@
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
 
 // Reusable Magnetic Bubble Component
 const MagneticBubble = ({ children, href }) => {
   const ref = useRef(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  
+  // Use MotionValues instead of React State to eliminate 60fps re-renders
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Apply spring physics directly to the motion values
+  const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
+  const x = useSpring(mouseX, springConfig);
+  const y = useSpring(mouseY, springConfig);
 
   const handleMouse = (e) => {
+    if (!ref.current) return;
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
     // Pull strength factor (0.3 means it moves 30% towards the mouse)
-    setPosition({ x: middleX * 0.3, y: middleY * 0.3 }); 
+    mouseX.set(middleX * 0.3);
+    mouseY.set(middleY * 0.3);
   };
 
   const reset = () => {
-    setPosition({ x: 0, y: 0 });
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
-  const { x, y } = position;
   const Tag = href ? 'a' : 'div';
 
   return (
@@ -27,8 +37,7 @@ const MagneticBubble = ({ children, href }) => {
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      style={{ x, y }}
       className="magnetic-bubble-wrapper"
     >
       <Tag 

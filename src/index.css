@@ -162,7 +162,7 @@ body::after {
   pointer-events: none;
   z-index: 99999;
   transition: width 0.35s, height 0.35s, border-color 0.35s, background 0.35s, opacity 0.35s;
-  transform: translate(-50%, -50%);
+  will-change: transform;
   mix-blend-mode: difference;
   opacity: 0.8;
 }
@@ -176,7 +176,7 @@ body::after {
 }
 
 .custom-cursor.clicking {
-  transform: translate(-50%, -50%) scale(0.75);
+  /* Scale is now handled dynamically in CustomCursor.jsx for performance */
 }
 
 @media (max-width: 768px) {
@@ -488,8 +488,19 @@ body::after {
     rgba(200, 169, 125, 0.15) 30%,
     rgba(200, 169, 125, 0.5)
   );
-  will-change: top;
+  will-change: transform;
   transition: opacity 0.1s;
+}
+
+@keyframes cssRainFall {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(120vh); }
+}
+
+.css-anim-drop {
+  animation-name: cssRainFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 .raindrop:hover {

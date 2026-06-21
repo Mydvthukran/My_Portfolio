@@ -9,13 +9,13 @@ const MagneticButton = ({ children, className = '', onClick, href, target, rel, 
     const rect = btn.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+    btn.style.transform = `translate3d(${x * 0.2}px, ${y * 0.2}px, 0)`;
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     const btn = btnRef.current;
     if (!btn) return;
-    btn.style.transform = 'translate(0px, 0px)';
+    btn.style.transform = 'translate3d(0px, 0px, 0)';
   }, []);
 
   const handleClick = useCallback((e) => {

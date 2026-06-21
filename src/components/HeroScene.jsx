@@ -1,95 +1,65 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 
 const createDrop = (id) => ({
   id,
   x: 10 + Math.random() * 85,
-  y: -5 - Math.random() * 15,
+  yStart: -20 - Math.random() * 100, // Stagger initial Y
   length: 12 + Math.random() * 20,
-  speed: 0.8 + Math.random() * 1.2,
+  duration: 0.8 + Math.random() * 0.6, // Animation duration
+  delay: Math.random() * 2, // Stagger animation start
   opacity: 0.05 + Math.random() * 0.15,
   width: 1 + Math.random() * 1.5,
-  splashing: false,
-  splashX: 0,
-  splashY: 0,
 });
 
 const HeroScene = () => {
-  const [drops, setDrops] = useState([]);
-  const [splashes, setSplashes] = useState([]);
-  const nextId = useRef(0);
-  const nextSplashId = useRef(0);
   const maxDrops = 100;
-
-  // Initialize drops spread across screen
-  useEffect(() => {
+  
+  // Memoize static drops so they don't trigger re-renders
+  const staticDrops = useMemo(() => {
     const initial = [];
     for (let i = 0; i < maxDrops; i++) {
-      const d = createDrop(nextId.current++);
-      d.y = Math.random() * 100;
-      initial.push(d);
+      initial.push(createDrop(i));
     }
-    setDrops(initial);
+    return initial;
   }, []);
 
-  // Rain animation loop
-  useEffect(() => {
-    let animId;
-    const animate = () => {
-      setDrops(prev => prev.map(d => {
-        if (d.splashing) return d;
-        let newY = d.y + d.speed * 0.2;
-        if (newY > 105) {
-          return createDrop(d.id);
-        }
-        return { ...d, y: newY };
-      }));
-      animId = requestAnimationFrame(animate);
-    };
-    animId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animId);
-  }, []);
+  const [splashes, setSplashes] = useState([]);
+  const nextSplashId = useRef(0);
 
   // Click to splash
-  const splashDrop = useCallback((id, x, y) => {
-    // Mark drop as splashing
-    setDrops(prev => prev.map(d =>
-      d.id === id ? { ...d, splashing: true } : d
-    ));
-
+  const splashDrop = useCallback((id, x) => {
+    // We can't know the exact Y in CSS, so we just use bottom area
+    const splashY = 85 + Math.random() * 10;
+    
     // Create splash particles
     const splashId = nextSplashId.current++;
-    setSplashes(prev => [...prev, { id: splashId, x, y }]);
+    setSplashes(prev => [...prev, { id: splashId, x, y: splashY }]);
 
     // Remove splash after animation
     setTimeout(() => {
       setSplashes(prev => prev.filter(s => s.id !== splashId));
     }, 600);
-
-    // Replace drop
-    setTimeout(() => {
-      setDrops(prev => prev.map(d =>
-        d.id === id ? createDrop(nextId.current++) : d
-      ));
-    }, 100);
   }, []);
 
   return (
     <div className="hero-rain">
       {/* Raindrops */}
-      {drops.map(d => (
+      {staticDrops.map(d => (
         <div
           key={d.id}
-          className={`raindrop ${d.splashing ? 'splash' : ''}`}
+          className="raindrop css-anim-drop"
           onClick={(e) => {
             e.stopPropagation();
-            splashDrop(d.id, d.x, d.y);
+            splashDrop(d.id, d.x);
           }}
           style={{
             left: `${d.x}%`,
-            top: `${d.y}%`,
+            top: `${d.yStart}%`, // Initial position above viewport
             height: `${d.length}px`,
             width: `${d.width}px`,
-            opacity: d.splashing ? 0 : d.opacity,
+            opacity: d.opacity,
+            animationDuration: `${d.duration}s`,
+            animationDelay: `${d.delay}s`
           }}
         />
       ))}

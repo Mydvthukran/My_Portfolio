@@ -21,8 +21,8 @@ const CustomCursor = () => {
     const animate = () => {
       pos.current.x += (target.current.x - pos.current.x) * 0.15;
       pos.current.y += (target.current.y - pos.current.y) * 0.15;
-      cursor.style.left = `${pos.current.x}px`;
-      cursor.style.top = `${pos.current.y}px`;
+      const scale = cursor.classList.contains('clicking') ? 0.75 : 1;
+      cursor.style.transform = `translate3d(calc(${pos.current.x}px - 50%), calc(${pos.current.y}px - 50%), 0) scale(${scale})`;
       rafId.current = requestAnimationFrame(animate);
     };
 
