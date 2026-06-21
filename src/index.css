@@ -1172,7 +1172,7 @@ body::after {
   display: flex;
   gap: 40px;
   padding: 40px 0 80px;
-  width: fit-content;
+  width: max-content;
   will-change: transform;
 }
 
@@ -1184,8 +1184,16 @@ body::after {
 }
 
 @media (max-width: 768px) {
+  .projects-horizontal-track {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    gap: 20px;
+    scroll-snap-type: x mandatory;
+  }
   .projects-horizontal-track .project-card {
     width: 85vw;
+    scroll-snap-align: center;
   }
 }
 

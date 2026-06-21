@@ -147,7 +147,8 @@ const App = () => {
     }
 
     // 2. Sections fade in (one-time, not scrub — lighter on GPU)
-    const sections = gsap.utils.toArray('.section');
+    // Exclude projects section to prevent GSAP conflict since it gets pinned!
+    const sections = gsap.utils.toArray('.section:not(#projects)');
     sections.forEach((section) => {
       gsap.fromTo(section,
         { opacity: 0, y: 50 },

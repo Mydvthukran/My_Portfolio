@@ -83,7 +83,7 @@ const Projects = () => {
 
   // Setup Horizontal Scroll
   useEffect(() => {
-    if (!trackRef.current || !wrapperRef.current) return;
+    if (!trackRef.current || !sectionRef.current || !wrapperRef.current) return;
     
     let ctx = gsap.context(() => {});
     
@@ -95,15 +95,18 @@ const Projects = () => {
         // Use matchMedia to handle responsive behavior
         let mm = gsap.matchMedia();
         mm.add("(min-width: 769px)", () => {
-          const getDistance = () => Math.max(0, track.scrollWidth - window.innerWidth + 100);
+          const getDistance = () => {
+            const wrapperLeft = wrapperRef.current.getBoundingClientRect().left;
+            return Math.max(0, track.scrollWidth - window.innerWidth + wrapperLeft + 80);
+          };
           
           gsap.to(track, {
             x: () => -getDistance(),
             ease: 'none',
             scrollTrigger: {
-              trigger: wrapperRef.current,
-              start: 'center center',
-              end: () => `+=${getDistance()}`,
+              trigger: sectionRef.current,
+              start: 'top top',
+              end: () => `+=${track.scrollWidth}`,
               pin: true,
               scrub: 1,
               invalidateOnRefresh: true,
