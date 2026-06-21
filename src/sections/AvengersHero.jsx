@@ -116,15 +116,43 @@ const AvengersHero = () => {
 
   return (
     <section className="hero-section" id="home" ref={heroRef}>
-      <div className="hero-image-bg">
-        <motion.img
-          src={heroImg}
-          alt="Manish Yadav"
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-          style={{ filter: 'grayscale(100%) contrast(1.2) brightness(0.8)' }}
-        />
+      <div className="hero-image-bg" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: '10%' }}>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0, rotate: -90 }}
+          animate={{ scale: 1, opacity: 0.3, rotate: 0 }}
+          transition={{ duration: 3, ease: "easeOut" }}
+          style={{ width: '600px', height: '600px', position: 'relative' }}
+        >
+          {/* Outer rotating ring */}
+          <motion.svg 
+            viewBox="0 0 100 100" 
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <circle cx="50" cy="50" r="48" fill="none" stroke="#ff4d4d" strokeWidth="0.5" strokeDasharray="4 8" />
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#ff4d4d" strokeWidth="1" strokeDasharray="20 10 5 10" />
+            <path d="M 50 2 L 50 8 M 50 92 L 50 98 M 2 50 L 8 50 M 92 50 L 98 50" stroke="#ff4d4d" strokeWidth="1.5" />
+          </motion.svg>
+          
+          {/* Inner counter-rotating ring */}
+          <motion.svg 
+            viewBox="0 0 100 100" 
+            style={{ position: 'absolute', top: '10%', left: '10%', width: '80%', height: '80%' }}
+            animate={{ rotate: -360 }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          >
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#ff4d4d" strokeWidth="0.5" strokeDasharray="2 4" />
+            <polygon points="50,10 60,30 85,35 65,55 70,80 50,65 30,80 35,55 15,35 40,30" fill="none" stroke="#ff4d4d" strokeWidth="0.5" />
+          </motion.svg>
+          
+          {/* Core glow */}
+          <div style={{ 
+            position: 'absolute', top: '40%', left: '40%', width: '20%', height: '20%', 
+            background: 'radial-gradient(circle, rgba(255,77,77,0.8) 0%, rgba(255,77,77,0) 70%)',
+            animation: 'pulse-red 2s infinite alternate' 
+          }} />
+        </motion.div>
       </div>
 
       <div className="hero-overlay-top" />
