@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
-import SectionTransition from '../components/SectionTransition';
+
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -120,7 +120,7 @@ const Projects = () => {
 
   return (
     <section className="section projects-section-wrapper" id="projects" ref={sectionRef}>
-      <SectionTransition isInView={isInView} type="slide" />
+
       <div className="section-container projects-scroll-wrapper" ref={wrapperRef}>
         <SectionTitle label="Portfolio" title="Featured" titleAccent="Work" />
 

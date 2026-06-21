@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 import SectionTitle from '../components/SectionTitle';
-import SectionTransition from '../components/SectionTransition';
+
 
 const skillCategories = [
   {
@@ -75,7 +75,7 @@ const Skills = () => {
 
   return (
     <section className="section" id="skills" ref={sectionRef}>
-      <SectionTransition isInView={isInView} type="split" />
+
       <div className="section-container">
         <SectionTitle label="Expertise" title="Technical" titleAccent="Arsenal" />
 
