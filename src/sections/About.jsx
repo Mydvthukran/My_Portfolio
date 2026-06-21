@@ -8,7 +8,7 @@ const terminalLines = [
     { type: 'blank' },
     { type: 'command', text: 'cat about.json' },
     { type: 'json', key: 'location', value: '"Rewari, Haryana, India"' },
-    { type: 'json', key: 'education', value: '"2nd Year CSE — SIET Panchkula"' },
+    { type: 'json', key: 'education', value: '"3rd Year CSE — SIET Panchkula"' },
     { type: 'json', key: 'specialization', value: '"Cyber Security"' },
     { type: 'json', key: 'passion', value: '"Where code meets cinema"' },
     { type: 'json', key: 'status', value: '"Learning"' },
@@ -117,82 +117,87 @@ const About = () => {
   const stats = [
     { value: '11+', label: 'Projects' },
     { value: '15+', label: 'Technologies' },
-    { value: '2nd', label: 'Year CSE' },
+    { value: '3rd', label: 'Year CSE' },
   ];
 
   return (
     <section className="section" id="about" ref={sectionRef}>
-
       <div className="section-container">
-        <div className="about-grid">
-          {/* Interactive terminal instead of static photo */}
-          <TerminalAbout isInView={isInView} />
+        <div className="section-label">
+          <span />
+          About Me
+        </div>
 
-          {/* Content */}
-          <motion.div
-            className="about-content"
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        <div className="bento-grid">
+          
+          {/* Bento Card 1: The Terminal */}
+          <motion.div 
+            className="bento-card bento-terminal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="section-label">
-              <span />
-              About
-            </div>
+            <TerminalAbout isInView={isInView} />
+          </motion.div>
 
+          {/* Bento Card 2: The Bio */}
+          <motion.div 
+            className="bento-card bento-bio"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
             <h2>
-              Building the future, <em>one pixel at a time</em>
+              Building the future, <br/><em>one pixel at a time</em>
             </h2>
-
             <p>
-              I'm a second-year Computer Science student at SIET Panchkula with a minor in{' '}
+              I'm a third-year Computer Science student at SIET Panchkula with a minor in{' '}
               <strong>Cyber Security</strong>. I believe in the intersection of code and design — 
               where technical precision meets visual storytelling.
             </p>
-
             <p>
               My journey is driven by an obsession with <strong>learning something new every day</strong>.
               From crafting pixel-perfect user interfaces with React to exploring the depths of 
               network security, I thrive on challenges that push boundaries.
             </p>
+          </motion.div>
 
-            <p>
-              When I'm not deep in code, you'll find me participating in hackathons,
-              experimenting, and collaborating with developers who share
-              the same passion for building remarkable digital experiences.
-            </p>
+          {/* Bento Card 3: The Stats */}
+          <motion.div 
+            className="bento-card bento-stats"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {stats.map((stat, i) => (
+              <div key={i} className="bento-stat-item">
+                <div className="stat-value">{stat.value}</div>
+                <div className="stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </motion.div>
 
-            {/* Stats */}
-            <div className="about-stats">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={i}
-                  className="stat-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.7, delay: 0.5 + i * 0.12 }}
-                >
-                  <div className="stat-value">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.button
-              className="resume-btn"
-              onClick={handleDownloadResume}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.9 }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {/* Bento Card 4: Resume Download */}
+          <motion.div 
+            className="bento-card bento-resume"
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            onClick={handleDownloadResume}
+          >
+            <div className="resume-icon-wrapper">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Download Resume
-            </motion.button>
+            </div>
+            <div className="resume-text">
+              <span>Grab a copy</span>
+              <strong>Download Resume</strong>
+            </div>
           </motion.div>
+
         </div>
       </div>
     </section>
