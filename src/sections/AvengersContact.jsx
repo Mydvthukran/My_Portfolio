@@ -229,7 +229,19 @@ const HangingSpiderman = ({ isInView }) => {
         ref={ref}
         onMouseMove={handleMouse}
         onMouseLeave={reset}
-        style={{ x, y, cursor: 'grab', marginTop: '-5px' }}
+        style={{ 
+          x, y, 
+          cursor: 'grab', 
+          marginTop: '-5px', 
+          zIndex: 10,
+          width: '180px',
+          height: '250px',
+          backgroundImage: "url('/spiderman.png')",
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'top center',
+          filter: 'drop-shadow(0px 10px 15px rgba(229,9,20,0.6))'
+        }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ cursor: 'grabbing', scale: 0.95 }}
         animate={{ 
@@ -240,21 +252,7 @@ const HangingSpiderman = ({ isInView }) => {
           repeat: Infinity, 
           ease: 'easeInOut',
         }}
-      >
-        <svg width="60" height="90" viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 10px 15px rgba(229,9,20,0.6))' }}>
-          {/* Head (Upside down: chin at y=15, top of head at y=80) */}
-          <path d="M 30 10 C 15 15 5 40 10 65 C 15 90 45 90 50 65 C 55 40 45 15 30 10 Z" fill="#E23636" stroke="#000" strokeWidth="2" />
-          
-          {/* Web pattern on face */}
-          <path d="M 30 10 L 30 90 M 15 25 L 45 25 M 8 45 L 52 45 M 8 65 L 52 65 M 30 45 L 10 15 M 30 45 L 50 15 M 30 45 L 5 80 M 30 45 L 55 80" stroke="#000" strokeWidth="1" opacity="0.6" />
-          
-          {/* Left Eye (near chin at top) */}
-          <path d="M 27 28 C 27 28 15 22 10 40 C 10 40 20 35 27 28 Z" fill="#FFF" stroke="#000" strokeWidth="2" />
-          
-          {/* Right Eye */}
-          <path d="M 33 28 C 33 28 45 22 50 40 C 50 40 40 35 33 28 Z" fill="#FFF" stroke="#000" strokeWidth="2" />
-        </svg>
-      </motion.div>
+      />
     </motion.div>
   );
 };
