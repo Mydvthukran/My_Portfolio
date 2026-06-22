@@ -88,12 +88,18 @@ const AvengersAbout = () => {
         <div className="avengers-dossier-grid">
           
           <motion.div 
-            className="avengers-dossier-panel terminal-panel"
+            className="avengers-dossier-panel terminal-panel jarvis-monitor-container"
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <ShieldTerminal isInView={isInView} />
+            <div className="jarvis-monitor-frame">
+              <div className="jarvis-monitor-screen">
+                <ShieldTerminal isInView={isInView} />
+              </div>
+              <div className="jarvis-monitor-stand"></div>
+              <div className="jarvis-monitor-base"></div>
+            </div>
           </motion.div>
 
           <motion.div 
