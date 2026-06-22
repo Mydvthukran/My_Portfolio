@@ -63,10 +63,11 @@ const speakWithMetallicEffect = (text, voices, onEnd) => {
   playArcReactorSound(audioCtx);
 
   // Speak after power-up sound completes
+  // Speak almost immediately, allowing slight overlap with arc reactor sound
   setTimeout(() => {
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.pitch = 0.6;
-    utterance.rate = 0.8;
+    utterance.pitch = 0.9; // Less robotic pitch
+    utterance.rate = 1.0;  // Normal speaking rate
     utterance.volume = 1;
 
     // Try to find the best deep male voice available
@@ -94,7 +95,7 @@ const speakWithMetallicEffect = (text, voices, onEnd) => {
     };
 
     speechSynthesis.speak(utterance);
-  }, 900); // Wait for arc reactor sound
+  }, 50); // Minimal delay instead of 900ms
 };
 
 // ─── Provider ────────────────────────────────────────────────────────────────
