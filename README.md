@@ -2,7 +2,7 @@
 
 A highly interactive, visually striking personal portfolio designed to showcase technical skills and projects through a cinematic lens. The experience is driven by smooth scrolling, parallax effects, and 3D elements, creating a memorable "editorial" feel.
 
-**Live Demo:** [https://my-pod-foliyo.vercel.app](https://my-pod-foliyo.vercel.app)
+**Live Demo:** [https://manishthukran.vercel.app](https://manishthukran.vercel.app)
 
 ## Tech Stack
 This portfolio is built for performance and visual fidelity using modern web technologies:
@@ -18,8 +18,8 @@ To run this portfolio locally on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Mydvthukran/My_PodFoliyo.git
-   cd My_PodFoliyo
+   git clone https://github.com/Mydvthukran/My_Portfolio.git
+   cd My_Portfolio
    ```
 
 2. **Install dependencies:**
