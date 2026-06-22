@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
+import myPic from '../assets/me/hero-cinematic.png';
 
 const shieldLogs = [
   { type: 'system', text: 'INITIATING OVERRIDE PROTOCOL...' },
@@ -103,28 +104,94 @@ const AvengersAbout = () => {
           </motion.div>
 
           <motion.div 
-            className="avengers-dossier-panel info-panel"
+            className="avengers-dossier-panel dossier-file-panel"
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="dossier-watermark">CLASSIFIED</div>
-            <h2 className="dossier-heading">Subject: Manish Yadav</h2>
-            <p className="dossier-text">
-              A highly capable 3rd-year Computer Science operative. Specializing in UI/UX architecture and Cyber Security. Known for blending technical precision with aggressive, highly-performant interface design.
-            </p>
-            <p className="dossier-text">
-              Current operational status: <strong>LEARNING AND ADAPTING</strong>. Threat level assessment suggests subject is rapidly expanding capabilities in React, Python, and advanced 3D web rendering.
-            </p>
+            <div className="dossier-spine">
+              <span className="spine-text">TOP SECRET // OMEGA ONLY</span>
+              <div className="spine-barcode"></div>
+            </div>
             
-            <div className="dossier-stats">
-              <div className="dossier-stat">
-                <span className="stat-num">11+</span>
-                <span className="stat-desc">SUCCESSFUL MISSIONS</span>
+            <div className="dossier-content-wrapper">
+              <div className="dossier-header-top">
+                S.H.I.E.L.D. INTELLIGENCE DOSSIER
+                <div className="header-line"></div>
               </div>
-              <div className="dossier-stat">
-                <span className="stat-num">15+</span>
-                <span className="stat-desc">WEAPONIZED TECH</span>
+              
+              <div className="dossier-meta">
+                <div className="meta-line"><span>FILE NO. :</span> MY-1999-IND</div>
+                <div className="meta-line"><span>CLEARANCE LEVEL :</span> <span className="text-red">OMEGA</span></div>
+                <div className="meta-line"><span>STATUS :</span> <span className="text-red">ACTIVE</span></div>
+                <div className="meta-line"><span>DATE :</span> 23 MAY 2025</div>
+              </div>
+              
+              <div className="dossier-classified-stamp-box">
+                <div className="stamp-border">
+                  <span>CLASSIFIED</span>
+                </div>
+              </div>
+              
+              <div className="dossier-main-body">
+                 <div className="dossier-left-col">
+                    <div className="dossier-subject-header">
+                       <h3>SUBJECT:</h3>
+                       <h1>MANISH YADAV</h1>
+                       <div className="barcode-horizontal"></div>
+                    </div>
+                    
+                    <div className="dossier-section">
+                      <h4>OVERVIEW</h4>
+                      <p>A highly capable 3rd-year Computer Science operative. Specilization in Fullstack web development and Cyber Security. Known for blending technical precision with aggressive, highly-performant interface design.</p>
+                    </div>
+                    
+                    <div className="dossier-section">
+                      <h4>OPERATIONAL SUMMARY</h4>
+                      <p>Current operational status: <span className="text-red">LEARNING AND ADAPTING</span>. Threat level assessment suggests subject is rapidly expanding capabilities in React, Python, and advanced 3D web rendering.</p>
+                    </div>
+                    
+                    <div className="dossier-section">
+                      <h4>KEY SPECIALIZATIONS</h4>
+                      <ul className="dossier-list">
+                        <li><span>&gt;</span>FullStack Operations</li>
+                        <li><span>&gt;</span> Cyber Security</li>
+                        <li><span>&gt;</span> UI/UX Architecture</li>
+                        <li><span>&gt;</span> 3D Web Development</li>
+                        <li><span>&gt;</span> Problem Solving</li>
+                      </ul>
+                    </div>
+                 </div>
+                 
+                 <div className="dossier-right-col">
+                    <div className="dossier-photo-container">
+                      <img src={myPic} alt="Subject Manish Yadav" className="dossier-photo" />
+                      <div className="dossier-shield-watermark-overlay"></div>
+                    </div>
+                 </div>
+              </div>
+              
+              <div className="dossier-footer">
+                 <div className="dossier-stats-box">
+                   <div className="stat-block">
+                     <span className="stat-num">11+</span>
+                     <span className="stat-label">SUCCESSFUL MISSIONS</span>
+                   </div>
+                   <div className="stat-divider"></div>
+                   <div className="stat-block">
+                     <span className="stat-num">15+</span>
+                     <span className="stat-label">WEAPONIZED TECH</span>
+                   </div>
+                 </div>
+                 
+                 <div className="dossier-auth">
+                   <div className="auth-signature">Nick Fury</div>
+                   <div className="auth-text">
+                     AUTHORIZED BY : <br/>
+                     NICK FURY <br/>
+                     DIRECTOR, S.H.I.E.L.D.
+                   </div>
+                 </div>
               </div>
             </div>
           </motion.div>
