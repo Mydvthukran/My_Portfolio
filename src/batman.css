@@ -379,3 +379,14 @@
   .batman-divider { justify-content: center; }
   .batman-actions { justify-content: center; }
 }
+
+@media (max-width: 768px) {
+  .batman-hero-section { padding-top: 60px; }
+  .batman-container { padding-top: 40px; padding-left: 20px; padding-right: 20px; overflow-x: hidden; }
+  .batman-hud { width: 300px; height: 300px; margin-top: 30px; opacity: 0.3 !important; position: absolute; z-index: -1; }
+  .batman-title-large { font-size: 2.5rem; margin-bottom: 10px; }
+  .batman-title-small { font-size: 1.2rem; }
+  .batman-subtitle { font-size: 0.9rem; margin-top: 10px; }
+  .batman-actions { flex-direction: column; gap: 15px; width: 100%; }
+  .batman-btn { width: 100%; text-align: center; padding: 15px; }
+}
