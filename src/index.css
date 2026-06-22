@@ -2665,6 +2665,24 @@ body.theme-avengers .orbit-node-inner {
   100% { opacity: 0; }
 }
 
+/* Flying Iron Man */
+.ironman-flying {
+  position: absolute;
+  top: 10%;
+  right: -5%;
+  width: 400px;
+  height: auto;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+  animation: ironmanHover 4s ease-in-out infinite alternate;
+}
+
+@keyframes ironmanHover {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-30px) rotate(-2deg); }
+}
+
 
 
 /* Gauntlet Button */

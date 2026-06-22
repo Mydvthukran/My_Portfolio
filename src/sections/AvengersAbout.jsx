@@ -86,6 +86,21 @@ const AvengersAbout = () => {
           TARGET PROFILE
         </div>
 
+        {/* Flying Iron Man */}
+        <motion.img 
+          src="/ironman.png" 
+          alt="Iron Man Flying"
+          className="ironman-flying"
+          initial={{ x: 1000, y: 500, scale: 0.5, opacity: 0 }}
+          animate={isInView ? { x: 0, y: 0, scale: 1, opacity: 1 } : {}}
+          transition={{ 
+            type: "spring",
+            stiffness: 50,
+            damping: 15,
+            delay: 0.5 
+          }}
+        />
+
         <div className="avengers-dossier-grid">
           
           <motion.div 
