@@ -57,7 +57,7 @@ const CustomCursor = () => {
       document.removeEventListener('mouseout', onMouseOut);
       cancelAnimationFrame(rafId.current);
     };
-  }, []);
+  }, [isTouchDevice]);
 
   // PERF: Don't render cursor element on touch devices
   if (isTouchDevice) return null;

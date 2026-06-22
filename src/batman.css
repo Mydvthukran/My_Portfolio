@@ -29,7 +29,7 @@
   height: 100%;
   background-image: 
     linear-gradient(to right, rgba(5,5,7,0.9) 0%, rgba(5,5,7,0.4) 50%, rgba(5,5,7,0.9) 100%),
-    url('/batman-bg.png');
+    url('/batman-bg.webp');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

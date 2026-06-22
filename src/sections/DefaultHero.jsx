@@ -6,9 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 import HeroScene from '../components/HeroScene';
 import MagneticButton from '../components/MagneticButton';
-import heroImg from '../assets/me/hero-cinematic.png';
+import heroImg from '../assets/me/hero-cinematic.webp';
 import { useEasterEgg } from '../context/EasterEggContext';
-import gauntletImg from '../assets/easter-egg/gauntlet.png';
+import gauntletImg from '../assets/easter-egg/gauntlet.webp';
 
 const Hero = () => {
   const [flash, setFlash] = useState(false);

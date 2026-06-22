@@ -26,4 +26,15 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]|^motion$' }],
     },
   },
+  {
+    files: ['download.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node
+      }
+    },
+    rules: {
+      'no-unused-vars': 'off'
+    }
+  }
 ])

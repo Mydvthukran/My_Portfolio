@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import myPic from '../assets/me/hero-cinematic.png';
+import myPic from '../assets/me/hero-cinematic.webp';
 
 const shieldLogs = [
   { type: 'system', text: 'INITIATING OVERRIDE PROTOCOL...' },
@@ -180,7 +180,7 @@ const AvengersAbout = () => {
                  
                  <div className="dossier-right-col">
                     <div className="dossier-photo-container">
-                      <img src={myPic} alt="Subject Manish Yadav" className="dossier-photo" />
+                      <img src={myPic} alt="Subject Manish Yadav" className="dossier-photo" loading="lazy" />
                       <div className="dossier-shield-watermark-overlay"></div>
                     </div>
                  </div>

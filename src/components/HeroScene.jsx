@@ -22,7 +22,7 @@ const HeroScene = () => {
       initial.push(createDrop(i));
     }
     return initial;
-  }, []);
+  }, [maxDrops]);
 
   const [splashes, setSplashes] = useState([]);
   const nextSplashId = useRef(0);

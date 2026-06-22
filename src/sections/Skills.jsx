@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
 import { useEasterEgg } from '../context/EasterEggContext';

@@ -23,7 +23,7 @@
   height: 100%;
   background-image: 
     radial-gradient(circle at center top, rgba(20, 25, 35, 0.4) 0%, #050505 70%),
-    url('/moonknight-bg.png');
+    url('/moonknight-bg.webp');
   background-size: cover;
   background-position: center top;
   background-attachment: fixed; /* This makes it fit perfectly to the screen viewport! */
